@@ -2,8 +2,13 @@
 
  const express  = require('express') 
  const cookieParser = require('cookie-parser')
- app.use(cookieParser())
-  const app = express()
+    const authRoutes = require('./routes/auth.routes')
+ 
+    const app = express()
+    app.use(cookieParser())
+   app.use(express.json()) 
 
-   app.use(express.json())
-module.exports = app ; 
+
+
+     app.use('/api/auth' , authRoutes)  //api/auth  is prefix 
+    module.exports = app ; 

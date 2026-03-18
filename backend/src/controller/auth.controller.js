@@ -33,4 +33,6 @@ const bcrypt = require('bcrypt')
         email:user.email
     }  })
    
- }
+ } 
+
+  module.exports = { registerUser}
