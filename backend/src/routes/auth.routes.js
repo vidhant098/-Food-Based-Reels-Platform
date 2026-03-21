@@ -11,4 +11,9 @@ router.post('/user/login' ,authController.loginUser   )
 router.post('/user/logout' , authController.logoutUser)
 
 router.post('/foodpartner/register' , authController.registerFoodPartner)
+
+router.post('/foodpartner/login' , authController.loginFoodpartner  )
+
+router.post('/foodpartner/logout' , authController.logoutFoodPartner)
+
 module.exports= router ;
