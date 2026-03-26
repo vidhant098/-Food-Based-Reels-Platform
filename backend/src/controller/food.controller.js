@@ -4,38 +4,44 @@ const foodModel = require("../models/food.model")  ;
 
   const    { v4:uuid} =require("uuid") ; 
 
-  async function createFood(req, res)
-    {
+  async function createFood(req, res) {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "Video is required" });
+    }
 
-     console.log(req.foodPartner)  
-    
-   
-   console.log(req.body)
-   console.log(req.file)
+    const fileUploadResult = await storageService.uploadFile(
+      req.file.buffer,
+      uuid() + "_" + req.file.originalname
+    );
 
-   const   fileUploadResult = await storageService.uploadFile(req.file.buffer , uuid());
- 
-  //   console.log("full result:" ,fileUploadResult)
-  //   console.log(fileUploadResult.url)
-  //  console.log(JSON.stringify(obj, null, 2));
-  //   console.log(resullt)  
-    
-   const foodItem = await foodModel.create({
-    name:req.body.name , 
-    description:req.body.description,
-    video:fileUploadResult.url ,
-    foodPartnerId:req.foodPartner._id
-   })
+    console.log("UPLOAD RESULT:", fileUploadResult);
 
+    const foodItem = await foodModel.create({
+      name: req.body.name,
+      description: req.body.description,
+      video: fileUploadResult.url,
+      foodPartnerId: req.foodPartner._id,
+    });
 
+    return res.status(201).json({
+      message: "Food created",
+      food: foodItem,
+    });
 
- res.status(200).json(
-  {message:"create food item ",
-   food :foodItem
- })
-      
-  }  
+  } catch (err) {
+    console.log("ERROR:", err);
+
+    return res.status(500).json({
+      message: "Something went wrong",
+      error: err.message, // 👈 IMPORTANT
+    });
+  }
+}
+
 
  module.exports= {createFood}  
+ 
 
+ 
 

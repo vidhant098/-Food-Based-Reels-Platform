@@ -12,6 +12,12 @@ const authMiddleware = require('../middlewares/auth.middleware')
 
 //  post/api/food/ protected/ create food item
 
-  router.post('/'  , authMiddleware.authFoodPartnerMiddleware    ,upload.single("video"),  foodController.createFood)
+  router.post('/'     ,upload.single('video'),  foodController.createFood) 
   
- module.exports = router ;
+ module.exports = router ; 
+
+
+
+
+//  const file = req.file; // This is the actual file buffer
+// await uploadFile(file.buffer, file.originalname);

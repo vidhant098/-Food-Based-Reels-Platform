@@ -2,17 +2,19 @@ const { default: mongoose } = require('mongoose');
 const mongooser = require('mongoose') ;
 
  const foodSchema = new mongooser.Schema({ 
-
-name:{
-    type:String,
-    required :true  
-},
+ 
 video:{
     type:String,
     requires:true
 
 },
- description:{
+
+name:{
+    type:String,
+    required :true  
+},
+
+ description :{
     type:String,
  },
  foodPartner:{

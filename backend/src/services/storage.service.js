@@ -9,16 +9,26 @@
         urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT
     });
 
-     
-    async function uploadFile(file, fileName) {
-    const result = await imagekit.upload({
-        file: file, // required
-        fileName: fileName, // required
-    })
 
+    
+     
+
+ 
+    async function uploadFile(file ,  fileName) {
+    const result = await imagekit.upload({
+        file: file, 
+        fileName: fileName, 
+    }) ; 
+
+     console.log("full result:" ,result )
+ 
+     
     return result; // Return the URL of the uploaded file
 }
 
       module.exports = {    
         uploadFile
       }
+
+
+ 
