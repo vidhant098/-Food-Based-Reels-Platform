@@ -12,7 +12,13 @@ const authMiddleware = require('../middlewares/auth.middleware')
 
 //  post/api/food/ protected/ create food item
 
-  router.post('/'     ,upload.single('video'),  foodController.createFood) 
+  // router.post('/'     ,upload.single('video'),  foodController.createFood) 
+  router.post(
+  '/',
+  authMiddleware.authFoodPartnerMiddleware,
+  upload.single('video'),
+  foodController.createFood
+);
   
  module.exports = router ; 
 
