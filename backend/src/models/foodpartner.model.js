@@ -21,7 +21,7 @@ let foodPartnerSchema = new mongoose.Schema({
         }
 
     }, {
-timestamps: true 
+             timestamps: true 
     }) 
 
       const foodPartnerModel = mongoose.model("foodpartner" , foodPartnerSchema)

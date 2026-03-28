@@ -1,7 +1,7 @@
 const { default: mongoose } = require('mongoose');
 const mongooser = require('mongoose') ;
 
- const foodSchema = new mongooser.Schema({ 
+ const foodSchema = new mongoose.Schema({ 
  
 video:{
     type:String,
