@@ -122,22 +122,21 @@ async function authFoodPartnerMiddleware(req, res, next) {
             token = req.headers.authorization.split(" ")[1];
         }
 
-        // ✅ 2. Optional: Check Cookies
+    
         else if (req.cookies && req.cookies.token) {
             token = req.cookies.token;
         }
 
-        // ❌ If no token
+        
         if (!token) {
             return res.status(401).json({
                 message: "No token provided"
             });
         }
 
-        // ✅ Verify Token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        // ✅ Find Food Partner
+     
         const foodPartner = await foodPartnerModel.findById(decoded.id);
 
         if (!foodPartner) {
@@ -146,7 +145,6 @@ async function authFoodPartnerMiddleware(req, res, next) {
             });
         }
 
-        // ✅ Attach to request
         req.foodPartner = foodPartner;
 
         next();
@@ -156,6 +154,34 @@ async function authFoodPartnerMiddleware(req, res, next) {
             message: "Invalid token"
         });
     }
-}
+} 
 
-module.exports = { authFoodPartnerMiddleware };
+ 
+ const authUserMiddleware = async (req, res, next) => {
+  
+     const token = req.cookies.token;
+
+     if (!token) {
+         return res.status(401).json({ message: "Unauthorized, please login first" });
+     }
+
+      try{
+
+        const decoded = jwt.verify(token , process.env.JWT_SECRET) 
+
+
+         const user = await userModel.findById(decoded.id);
+
+
+         req.user = user;
+
+         next();
+      } 
+
+       catch(err)
+       {
+        res.status(401).json({ message: "Invalid token" });
+
+ }
+
+module.exports = { authFoodPartnerMiddleware, authUserMiddleware };
