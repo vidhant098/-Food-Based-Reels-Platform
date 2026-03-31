@@ -40,7 +40,31 @@ const foodModel = require("../models/food.model")  ;
 }
 
 
- module.exports= {createFood}  
+ async  function getFoodItems(req, res )
+ {
+  
+   try{
+ const fooditems = await foodModel.find({}) ;
+
+  res.status(200).json({
+    message:"Food items fetched successfully",
+    foodItems: fooditems
+  });
+
+
+   }
+   catch(err){
+     res.send(500).json({
+       message:"Something went wrong",
+       error: err.message
+     })
+   }
+
+
+ 
+ }
+
+ module.exports= {createFood, getFoodItems}  
  
 
  

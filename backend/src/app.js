@@ -14,7 +14,9 @@
 
      app.use('/api/auth' , authRoutes)  //api/auth  is prefix 
      
- app.use('/api/food' , foodRoutes)   
+      app.use('/api/food' , foodRoutes)     
+
+      
 
      
      module.exports = app ; 

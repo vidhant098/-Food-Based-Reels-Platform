@@ -28,7 +28,7 @@ const bcrypt = require('bcrypt');
      const token = jwt.sign(
         
         {  id:user._id, },
-    pricess.env.JWT_SECRET )
+    process.env.JWT_SECRET )
     
     res.cookie("token" , token ) 
 

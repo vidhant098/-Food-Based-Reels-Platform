@@ -6,9 +6,11 @@ const  express = require('express');
 const foodController = require('../controller/food.controller')
 
 const authMiddleware = require('../middlewares/auth.middleware')
-  
- const upload = multer({storage: multer.memoryStorage()},)
+   
 
+
+ const upload = multer({storage: multer.memoryStorage()},)
+ 
 
 //  post/api/food/ protected/ create food item
 
@@ -19,6 +21,10 @@ const authMiddleware = require('../middlewares/auth.middleware')
   upload.single('video'),
   foodController.createFood
 );
+
+//  api for normal users  we have created new middleware for normal usr  
+
+ router.get("/"  ,authMiddleware.authUserMiddleware   , foodController.getFoodItems) 
   
  module.exports = router ; 
 
