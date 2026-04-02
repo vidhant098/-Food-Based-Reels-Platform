@@ -44,9 +44,9 @@ const foodModel = require("../models/food.model")  ;
  {
   
    try{
- const fooditems = await foodModel.find({}) ;
+  const fooditems = await foodModel.find({}) ;
 
-  res.status(200).json({
+    res.status(200).json({
     message:"Food items fetched successfully",
     foodItems: fooditems
   });
