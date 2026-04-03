@@ -16,10 +16,10 @@ const FoodPartnerRegister = () => {
           
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <h2>Restaurant Name</h2>
+              <h2>Business name </h2>
               <input 
                 type="text" 
-                placeholder="Your restaurant name"
+                placeholder="busines name/brand name"
                 required 
               />
             </div>
@@ -32,15 +32,28 @@ const FoodPartnerRegister = () => {
                 required 
               />
             </div>
+ 
+ <div className="form-group">
+              <h2>Email</h2>
+              <input 
+                type="email" 
+                placeholder="restaurant@email.com"
+                required 
+              />
+            </div> 
+
 
             <div className="form-group">
-              <h2>Business Name</h2>
+              <h2>Phone</h2>
               <input 
-                type="text" 
-                placeholder="Business/Brand name"
+                type="number" 
+                placeholder="Phone number"
                 required 
               />
             </div>
+              
+
+
 
             <div className="form-group">
               <h2>Business Address</h2>
@@ -51,14 +64,7 @@ const FoodPartnerRegister = () => {
               />
             </div>
 
-            <div className="form-group">
-              <h2>Email</h2>
-              <input 
-                type="email" 
-                placeholder="restaurant@email.com"
-                required 
-              />
-            </div>
+            
 
             <div className="form-group">
               <h2>Password</h2>
@@ -76,7 +82,8 @@ const FoodPartnerRegister = () => {
                 placeholder="Confirm password"
                 required 
               />
-            </div>
+            </div> 
+
 
             <button type="submit" className="submit-btn">
               Create Partner Account

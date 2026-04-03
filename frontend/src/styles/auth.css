@@ -20,27 +20,35 @@
   text-align: center;
 }
 
+.form-group {
+  position: relative;
+  margin-bottom: 1.75rem;
+}
+
 .auth-container h2 {
   font-size: 0.875rem;
   font-weight: 500;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0 0;
   color: var(--text-h);
   letter-spacing: 0.025em;
-  position: relative;
 }
 
-.auth-form input:focus + ~ h2,
-.auth-form input:not(:placeholder-shown) + ~ h2 {
-  font-size: 0.75rem;
-  transform: translateY(-1.25rem) scale(0.85);
-  color: var(--accent);
-  background: var(--input-bg);
-  padding: 0 0.5rem;
+.form-group h2 {
   position: absolute;
-  top: -0.5rem;
   left: 1rem;
+  top: 1rem;
   pointer-events: none;
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+}
+
+.auth-form input:focus ~ h2,
+.auth-form input:not(:placeholder-shown) ~ h2 {
+  font-size: 0.75rem;
+  transform: translateY(-1.5rem) scale(0.85);
+  color: var(--accent);
+  background: var(--bg);
+  padding: 0 0.5rem;
 }
 
 .form-group {
@@ -49,15 +57,14 @@
 
 .auth-form input {
   width: 100%;
-  padding: 1.75rem 1rem 0.875rem 1rem;
+  padding: 2.25rem 1rem 1rem 1rem;
   border: 2px solid var(--input-border);
-  border-radius: 12px;
-  background: var(--input-bg);
+  border-radius: 16px;
+  background: var(--bg);
   color: var(--text-h);
   font-size: 1rem;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   box-sizing: border-box;
-  position: relative;
 }
 
 .auth-form input:focus {

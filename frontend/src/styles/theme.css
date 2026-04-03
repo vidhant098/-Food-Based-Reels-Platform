@@ -1,17 +1,14 @@
-/* Centralized theme variables - builds on src/index.css */
-/* Import base styles and extend for auth pages */
 
 @import '../index.css';
 
-/* Auth-specific variables */
 :root {
-  --form-bg: var(--bg);
-  --form-border: var(--border);
-  --input-bg: rgba(255,255,255,0.8);
-  --input-border: var(--border);
+  --form-bg: rgba(255,255,255,0.7);
+  --form-border: rgba(229,228,231,0.6);
+  --input-bg: rgba(255,255,255,0.95);
+  --input-border: rgba(229,228,231,0.7);
   --input-focus: var(--accent);
   --btn-primary: var(--accent);
-  --btn-primary-hover: color-mix(in srgb, var(--accent) 90%, black);
+  --btn-primary-hover: color-mix(in srgb, var(--accent) 85%, black);
   --btn-text: white;
   --label-text: var(--text-h);
   --error-color: #ef4444;
@@ -19,18 +16,21 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --input-bg: rgba(0,0,0,0.2);
+    --form-bg: rgba(35,35,45,0.7);
+    --form-border: rgba(46,48,58,0.6);
+    --input-bg: rgba(50,50,60,0.95);
+    --input-border: rgba(46,48,58,0.7);
   }
 }
 
-/* Global form resets */
+
 .auth-form {
   background: var(--form-bg);
   border: 1px solid var(--form-border);
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: var(--shadow);
-  max-width: 400px;
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+  max-width: 420px;
   width: 100%;
   backdrop-filter: blur(20px);
 }
@@ -38,7 +38,7 @@
 @media (max-width: 640px) {
   .auth-form {
     margin: 1rem;
-    padding: 1.5rem;
+    padding: 2rem;
   }
 }
 
