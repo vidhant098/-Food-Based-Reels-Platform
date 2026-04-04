@@ -1,10 +1,20 @@
 import React from 'react';
 import '../styles/auth.css';
+ 
+ import axios  from 'axios'
 
-const UserRegister = () => {
+const UserRegister = () => { 
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // No logic needed - UI only
+    
+     
+     const firstName = e.target.firstName.value
+
+console.log( "firstname", firstName)
+
+   
     console.log('User Register submitted');
   };
 

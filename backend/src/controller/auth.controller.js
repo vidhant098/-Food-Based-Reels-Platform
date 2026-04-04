@@ -91,7 +91,7 @@ const bcrypt = require('bcrypt');
   
     async function registerFoodPartner(req , res )
     {
-     const    {name , email , password } = req.body ; 
+     const    {name , email , password  , businessName , phone , address } = req.body ; 
 
          const isAccountAlreadyExist =  await foodPartnerModel.findOne({email:email})
          
@@ -103,7 +103,10 @@ const bcrypt = require('bcrypt');
  
         const  foodPartner =  await foodPartnerModel.create({
             name : name , 
-             email:email,
+             email:email, 
+              businessName:businessName ,
+              phone:phone ,
+              address:address ,
              password:hashedPassword
         })
          const token = jwt.sign({
@@ -117,7 +120,10 @@ const bcrypt = require('bcrypt');
                 message:"food partnet regitered successfully "  ,  
                 _id:foodPartner._id ,
                     name:foodPartner.name ,
-                email:foodPartner.email
+                email:foodPartner.email ,
+                businessName:foodPartner.businessName ,
+                phone:foodPartner.phone ,
+                address:foodPartner.address
                  
             })
     }  

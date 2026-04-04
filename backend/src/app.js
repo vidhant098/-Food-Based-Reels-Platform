@@ -5,6 +5,8 @@
     const authRoutes = require('./routes/auth.routes')
   
  const foodRoutes = require('./routes/food.routes')
+  const cors = require('cors')
+
 
     const app = express()
     app.use(cookieParser())
