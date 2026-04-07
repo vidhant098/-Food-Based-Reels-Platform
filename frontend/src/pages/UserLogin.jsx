@@ -21,7 +21,7 @@ const UserLogin = () => {
           password
         },
         {
-          withCredentials: true   // ✅ cookie store
+          withCredentials: true   
         }
       );
 
@@ -46,7 +46,7 @@ const UserLogin = () => {
             <div className="form-group">
               <h2>Email</h2>
               <input 
-                name="email"   // ✅ important
+                name="email"   
                 type="email" 
                 placeholder="your@email.com"
                 required 
@@ -56,7 +56,7 @@ const UserLogin = () => {
             <div className="form-group">
               <h2>Password</h2>
               <input 
-                name="password"   // ✅ important
+                name="password"   
                 type="password" 
                 placeholder="Enter your password"
                 required 
