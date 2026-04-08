@@ -1,11 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/auth.css';
+import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
 
 const FoodPartnerLogin = () => {
-  const handleSubmit = (e) => {
+
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // No logic needed - UI only
-    console.log('Food Partner Login submitted');
+
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    setError("");
+    setLoading(true);   
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/auth/food-partner/login",
+        { email, password },
+        { withCredentials: true }
+      );
+
+      console.log("Login Success:", response.data);
+
+      navigate("/");
+
+    } catch (err) {
+      const message = err.response?.data?.message || "Login failed";
+      setError(message);
+    } finally {
+      setLoading(false);   // 🔥 STOP loading
+    }
   };
 
   return (
@@ -15,9 +45,14 @@ const FoodPartnerLogin = () => {
           <h1>Partner Login</h1>
           
           <form onSubmit={handleSubmit}>
+
+            {/* ✅ Show error */}
+            {error && <p className="error">{error}</p>}
+
             <div className="form-group">
               <h2>Email</h2>
               <input 
+                name="email"
                 type="email" 
                 placeholder="restaurant@email.com"
                 required 
@@ -27,21 +62,33 @@ const FoodPartnerLogin = () => {
             <div className="form-group">
               <h2>Password</h2>
               <input 
+                name="password"
                 type="password" 
                 placeholder="Enter your password"
                 required 
               />
             </div>
 
-            <button type="submit" className="submit-btn">
-              Sign In as Partner
+            {/* ✅ Loading button */}
+            <button 
+              type="submit" 
+              className="submit-btn"
+              disabled={loading}
+            >
+              {loading ? "Logging in..." : "Sign In as Partner"}
             </button>
+
           </form>
 
           <div className="links">
-            <p>New partner? <a href="/food-partner/register">Register your restaurant</a></p>
-            <p>Normal user? <a href="/user/login">User Login</a></p>
+            <p>
+              New partner? <Link to="/food-partner/register">Register here</Link>
+            </p>
+            <p>
+              Normal user? <Link to="/user/login">User Login</Link>
+            </p>
           </div>
+
         </div>
       </div>
     </div>
@@ -49,4 +96,3 @@ const FoodPartnerLogin = () => {
 };
 
 export default FoodPartnerLogin;
-

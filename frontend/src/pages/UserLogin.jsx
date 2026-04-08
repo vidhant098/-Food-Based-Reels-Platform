@@ -1,17 +1,29 @@
 import React from 'react';
 import '../styles/auth.css';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; 
+
+ import { useState } from 'react';
 
 const UserLogin = () => {
 
-  const navigate = useNavigate();   // ✅ correct
+  const navigate = useNavigate();  
+
+
+   const [loading  , setLoading ] = useState(false) ; 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const email = e.target.email.value;
     const password = e.target.password.value;
+  
+     if(!email.includes("@")){
+      alert("Please enter a valid email address");
+      return; 
+
+     }
+setLoading(true) ; 
 
     try {
       const response = await axios.post(
@@ -27,12 +39,16 @@ const UserLogin = () => {
 
       console.log("Login Success:", response.data);
 
-      navigate("/");   // ✅ redirect after login
+      navigate("/");  
 
     } catch (err) {
       console.log(err.response?.data || err.message);
       alert("Login failed");
-    }
+    } 
+
+     finally{
+       setLoading(false) ;
+     }
   };
 
   return (
@@ -63,8 +79,12 @@ const UserLogin = () => {
               />
             </div>
 
-            <button type="submit" className="submit-btn">
-              Login
+            
+ 
+ 
+
+  <button type='submit'  className='submit-btn' disabled={loading}>
+              {loading ? "Logging in..." : "Login"}
             </button>
 
           </form>

@@ -79,7 +79,8 @@ const UserRegister = () => {
             <div className="form-group">
               <h2>Confirm Password</h2>
               <input 
-                type="password" 
+                type="password"  
+               
                 placeholder="Confirm password"
                 required 
               />
@@ -92,8 +93,8 @@ const UserRegister = () => {
           </form>
 
           <div className="links">
-            <p>Already have an account? <a href="/user/login">Sign in</a></p>
-            <p>Restaurant owner? <a href="/food-partner/register">Join as Food Partner</a></p>
+            <p>Already have an account? <Link to="user/login">Sign in</Link></p>
+            <p>Restaurant owner? <Link to="food-partner/register">Join as Food Partner</Link></p>
           </div>
 
         </div>
