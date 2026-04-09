@@ -1,10 +1,62 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/auth.css';
+import { Link, useNavigate } from 'react-router-dom';
+ 
+import axios from 'axios';
+const FoodPartnerRegister = () => { 
 
-const FoodPartnerRegister = () => {
+  const [loading , setLoading] = useState(false) 
+   
+   const navigate    = useNavigate() ; 
+
+
   const handleSubmit = (e) => {
+
     e.preventDefault();
-    // No logic needed - UI only
+
+     
+     const ownerName = e.target.name.value; 
+    
+      const businessName = e.target.businessName.value
+
+      const email = e.target.email.value; 
+
+   const phone = e.target.phone.value;
+  
+
+   const address  = e.target.address.value;
+         
+
+   const password  = e.target.password.value ; 
+     
+ 
+    try{
+ 
+      const response =  axios.post("http://localhost:3000/api/auth/food-partner/login" ,
+     {  ownerName,
+        businessName,
+       email,
+       phone,
+       address,
+       password
+
+      }  , 
+      { withCredentials: true   } 
+
+      )  
+
+      navigate('/')
+
+    } 
+    catch(err){ 
+ console.log(err)
+
+    }
+
+
+
+
+
     console.log('Food Partner Register submitted');
   };
 
@@ -18,25 +70,30 @@ const FoodPartnerRegister = () => {
             <div className="form-group">
               <h2>Business name </h2>
               <input 
-                type="text" 
+                type="text"  
+                name='businessName'
                 placeholder="busines name/brand name"
                 required 
               />
             </div>
 
             <div className="form-group">
-              <h2>Owner Name</h2>
-              <input 
+              <h2> OwnerName</h2>
+              <input
+              
                 type="text" 
+                name="name" 
                 placeholder="Owner full name"
                 required 
               />
             </div>
  
- <div className="form-group">
+           <div className="form-group">
               <h2>Email</h2>
+
               <input 
-                type="email" 
+                type="email"  
+                name='email'
                 placeholder="restaurant@email.com"
                 required 
               />
@@ -46,19 +103,19 @@ const FoodPartnerRegister = () => {
             <div className="form-group">
               <h2>Phone</h2>
               <input 
-                type="number" 
+                type="number"  
+                name='phone'
                 placeholder="Phone number"
                 required 
               />
             </div>
               
 
-
-
             <div className="form-group">
               <h2>Business Address</h2>
               <input 
                 type="text" 
+                name='address'
                 placeholder="Street, City, PIN"
                 required 
               />
@@ -69,7 +126,8 @@ const FoodPartnerRegister = () => {
             <div className="form-group">
               <h2>Password</h2>
               <input 
-                type="password" 
+                type="password"  
+                name='password'
                 placeholder="Create password"
                 required 
               />
@@ -84,15 +142,17 @@ const FoodPartnerRegister = () => {
               />
             </div> 
 
-
             <button type="submit" className="submit-btn">
               Create Partner Account
             </button>
           </form>
 
           <div className="links">
-            <p>Already registered? <a href="/food-partner/login">Sign in</a></p>
-            <p>Normal user? <a href="/user/register">Join as User</a></p>
+
+              <p>Already registered? <Link to='/food-partner/login'>Sign in</Link>  </p>
+          
+            <p>Normal user? <Link to ="/user/register"></Link></p>
+
           </div>
         </div>
       </div>

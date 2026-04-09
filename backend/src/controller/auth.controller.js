@@ -91,7 +91,7 @@ const bcrypt = require('bcrypt');
   
     async function registerFoodPartner(req , res )
     {
-     const    {name , email , password  , businessName , phone , address } = req.body ; 
+     const    {ownerName , email , password  , businessName , phone , address } = req.body ; 
 
          const isAccountAlreadyExist =  await foodPartnerModel.findOne({email:email})
          
@@ -102,7 +102,7 @@ const bcrypt = require('bcrypt');
           const   hashedPassword = await bcrypt.hash(password , 10) ;
  
         const  foodPartner =  await foodPartnerModel.create({
-            name : name , 
+           ownerName :ownerName , 
              email:email, 
               businessName:businessName ,
               phone:phone ,
@@ -119,7 +119,7 @@ const bcrypt = require('bcrypt');
             res.status(200).json({
                 message:"food partnet regitered successfully "  ,  
                 _id:foodPartner._id ,
-                    name:foodPartner.name ,
+                ownerName:foodPartner.ownerName,
                 email:foodPartner.email ,
                 businessName:foodPartner.businessName ,
                 phone:foodPartner.phone ,
