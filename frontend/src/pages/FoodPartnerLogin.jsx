@@ -34,7 +34,7 @@ const FoodPartnerLogin = () => {
       const message = err.response?.data?.message || "Login failed";
       setError(message);
     } finally {
-      setLoading(false);   // 🔥 STOP loading
+      setLoading(false);   
     }
   };
 

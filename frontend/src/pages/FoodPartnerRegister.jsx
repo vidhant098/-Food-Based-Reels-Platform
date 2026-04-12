@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
 import '../styles/auth.css';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from 'axios'; 
 
 const FoodPartnerRegister = () => { 
 
   const [loading , setLoading] = useState(false); 
   const [error, setError] = useState(""); 
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {  
-
     e.preventDefault();
 
-    const ownerName = e.target.name.value; 
+    const ownerName = e.target.ownerName.value; 
     const businessName = e.target.businessName.value;
     const email = e.target.email.value; 
     const phone = e.target.phone.value;
     const address  = e.target.address.value;
     const password  = e.target.password.value; 
-    const confirmPassword = e.target[6].value;
+    const confirmPassword = e.target.confirmPassword.value;
 
+    // ✅ password validation (important)
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
@@ -31,9 +31,8 @@ const FoodPartnerRegister = () => {
     setLoading(true);   
 
     try{
- 
       const response = await axios.post(   
-        "http://localhost:3000/api/auth/food-partner/login" ,
+        "http://localhost:3000/api/auth/food-partner/register",
         {  
           ownerName,
           businessName,
@@ -47,18 +46,17 @@ const FoodPartnerRegister = () => {
 
       console.log(response.data);
 
-      navigate('/');   // ✅ stays same
+      navigate('/');  
 
     } 
     catch(err){ 
       console.log(err);
-      setError(err.response?.data?.message || "Registration failed"); // ✅ added
+      alert(err)
+      setError(err.response?.data?.message || "Registration failed"); 
     }
     finally {
       setLoading(false);   
     }
-
-    console.log('Food Partner Register submitted');
   };
 
   return (
@@ -72,30 +70,30 @@ const FoodPartnerRegister = () => {
             {error && <p className="error">{error}</p>}
 
             <div className="form-group">
-              <h2>Business name </h2>
+              <h2>Business name</h2>
               <input 
                 type="text"  
-                name='businessName'
-                placeholder="busines name/brand name"
+                name="businessName"
+                placeholder="Business name / brand name"
                 required 
               />
             </div>
 
             <div className="form-group">
-              <h2> OwnerName</h2>
+              <h2>Owner Name</h2>
               <input
                 type="text" 
-                name="name" 
+                name="ownerName" 
                 placeholder="Owner full name"
                 required 
               />
             </div>
  
-           <div className="form-group">
+            <div className="form-group">
               <h2>Email</h2>
               <input 
                 type="email"  
-                name='email'
+                name="email"
                 placeholder="restaurant@email.com"
                 required 
               />
@@ -104,8 +102,8 @@ const FoodPartnerRegister = () => {
             <div className="form-group">
               <h2>Phone</h2>
               <input 
-                type="number"  
-                name='phone'
+                type="text"   // ✅ better than number
+                name="phone"
                 placeholder="Phone number"
                 required 
               />
@@ -115,7 +113,7 @@ const FoodPartnerRegister = () => {
               <h2>Business Address</h2>
               <input 
                 type="text" 
-                name='address'
+                name="address"
                 placeholder="Street, City, PIN"
                 required 
               />
@@ -125,7 +123,7 @@ const FoodPartnerRegister = () => {
               <h2>Password</h2>
               <input 
                 type="password"  
-                name='password'
+                name="password"
                 placeholder="Create password"
                 required 
               />
@@ -133,14 +131,14 @@ const FoodPartnerRegister = () => {
 
             <div className="form-group">
               <h2>Confirm Password</h2>
-              <input 
+              <input  
                 type="password" 
+                name="confirmPassword"
                 placeholder="Confirm password"
                 required 
               />
             </div> 
 
-            {/* ✅ loading button */}
             <button 
               type="submit" 
               className="submit-btn"
@@ -152,8 +150,8 @@ const FoodPartnerRegister = () => {
           </form>
 
           <div className="links">
-            <p>Already registered? <Link to='/food-partner/login'>Sign in</Link></p>
-            <p>Normal user? <Link to="/user/register"></Link></p>
+            <p>Already registered? <Link to="/food-partner/login">Sign in</Link></p>
+            <p>Normal user? <Link to="/user/register">Register here</Link></p>
           </div>
         </div>
       </div>

@@ -101,7 +101,7 @@ const bcrypt = require('bcrypt');
 
           const   hashedPassword = await bcrypt.hash(password , 10) ;
  
-        const  foodPartner =  await foodPartnerModel.create({
+           const  foodPartner =  await foodPartnerModel.create({
            ownerName :ownerName , 
              email:email, 
               businessName:businessName ,
@@ -143,7 +143,7 @@ const bcrypt = require('bcrypt');
           const isPasswordValid= await bcrypt.compare(password , foodPartner.password)  ;  
           if(!isPasswordValid)
           {
-              res.status(400).json({message:"invalid email or password "})  ;
+          return     res.status(400).json({message:"invalid email or password "})  ;
 
           }  
 
@@ -156,8 +156,8 @@ const bcrypt = require('bcrypt');
 
              res.status(200).json({
                 message:"food partner login successfully"  ,  
-               foodPartner: { _id:foodPartner._id ,
-                    name:foodPartner.name ,
+                foodPartner: { _id:foodPartner._id ,
+                ownerName:foodPartner.ownerName ,
                 email:foodPartner.email} 
               
               })

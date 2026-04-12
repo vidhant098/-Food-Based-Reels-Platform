@@ -2,7 +2,7 @@
 
 let foodPartnerSchema = new mongoose.Schema({
    
-    ownweName:{
+    ownerName:{
         type:String , 
         required:true 
     } ,
