@@ -32,7 +32,7 @@ const FoodPartnerRegister = () => {
 
     try{
       const response = await axios.post(   
-        "http://localhost:3000/api/auth/food-partner/register",
+        "http://localhost:3000/api/auth/foodpartner/register",
         {  
           ownerName,
           businessName,
@@ -46,7 +46,7 @@ const FoodPartnerRegister = () => {
 
       console.log(response.data);
 
-      navigate('/');  
+      navigate('/create-food');  
 
     } 
     catch(err){ 

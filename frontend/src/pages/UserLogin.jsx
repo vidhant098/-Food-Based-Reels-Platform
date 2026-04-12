@@ -39,7 +39,7 @@ setLoading(true) ;
 
       console.log("Login Success:", response.data);
 
-      navigate("/");  
+      navigate("/create-food");  
 
     } catch (err) {
       console.log(err.response?.data || err.message);
