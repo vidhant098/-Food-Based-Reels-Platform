@@ -177,7 +177,7 @@ const bcrypt = require('bcrypt');
   module.exports = { registerUser  , 
      loginUser ,
        logoutUser  ,
-      registerFoodPartner,
+       registerFoodPartner,
       loginFoodpartner,
       logoutFoodPartner
 

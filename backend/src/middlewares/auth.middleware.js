@@ -12,8 +12,7 @@ async function authFoodPartnerMiddleware(req, res, next) {
     try {
         let token;
 
-        // ✅ 1. Check Authorization Header (Postman)
-        if (
+         if (
             req.headers.authorization &&
             req.headers.authorization.startsWith("Bearer")
         ) {
