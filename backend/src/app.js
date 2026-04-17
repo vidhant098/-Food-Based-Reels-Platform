@@ -5,6 +5,9 @@
     const authRoutes = require('./routes/auth.routes')
   
  const foodRoutes = require('./routes/food.routes')
+
+
+ foodpartnerRoutes = require('./routes/food-partner.routes')
   const cors = require('cors')
 
 
@@ -28,7 +31,7 @@
      
       app.use('/api/food' , foodRoutes)     
 
-      
+       app.use('/api/food-partner' , foodpartnerRoutes)
 
      
      module.exports = app ; 
