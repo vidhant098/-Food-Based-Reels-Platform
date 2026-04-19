@@ -7,23 +7,22 @@ const Profile = () => {
   const [foods, setFoods] = useState([]);
 
   // Mock data (replace with real API fetches later)
-  useEffect(() => {
-    setTimeout(() => {
-      setProfile({
-        businessName: "Tasty Bites Restaurant",
-        ownerName: "John Doe",
-        address: "123 Food Street, City Center, FoodCity 12345",
-        profilePic: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&fit=crop"
-      });
-      setFoods(Array.from({ length: 9 }, (_, i) => ({
-        _id: `food${i}`,
-        name: `Delicious Dish ${i + 1}`,
-        video: '../../video.mp4', // Use local video.mp4 or replace with real URLs
-        description: "Amazing food video reel"
-      })));
-      setLoading(false);
-    }, 1500);
-  }, []);
+  useEffect( 
+    ()=> { 
+
+   axios.get(`http://localhost:3000/api/foor-partner/${id}`  
+  , {withCredentials:true}
+ ) 
+ .then(  res=> {  
+  setProfile(res.data.foodpartner) 
+
+
+ })
+     
+
+
+  }  , [id])
+
 
   const totalAdded = foods.length;
   const totalServed = Math.floor(Math.random() * 5000) + totalAdded * 5; // Mock served count

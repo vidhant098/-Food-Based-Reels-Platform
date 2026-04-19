@@ -31,7 +31,7 @@
      
       app.use('/api/food' , foodRoutes)     
 
-       app.use('/api/food-partner' , foodpartnerRoutes)
+       app.use('/api/food-partner' ,  foodpartnerRoutes)
 
      
      module.exports = app ; 

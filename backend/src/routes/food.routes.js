@@ -27,7 +27,6 @@ const authMiddleware = require('../middlewares/auth.middleware')
  router.get("/"  ,authMiddleware.authUserMiddleware   , foodController.getFoodItems) 
   
 
- router.get("/:id" , authMiddleware.authUserMiddleware , foodPartnerController.getFoodPartnerById)
  
 
  module.exports = router ; 
