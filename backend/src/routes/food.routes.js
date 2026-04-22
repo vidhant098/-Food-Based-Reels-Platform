@@ -24,9 +24,15 @@ const authMiddleware = require('../middlewares/auth.middleware')
 
 //  api for normal users  we have created new middleware for normal usr  
 
- router.get("/"  ,authMiddleware.authUserMiddleware   , foodController.getFoodItems) 
+ router.get("/" 
+   ,authMiddleware.authUserMiddleware  
+    , foodController.getFoodItems) 
   
+ 
 
+  router.post('/' 
+    , authMiddleware.authUserMiddleware ,  
+     foodController.likeFood)
  
 
  module.exports = router ; 

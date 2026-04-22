@@ -1,4 +1,5 @@
 const foodModel = require("../models/food.model")  ;
+const LikeModel  = require("../models/likes.model");
  
  const storageService = require("../services/storage.service")  ;
 
@@ -64,7 +65,66 @@ const foodModel = require("../models/food.model")  ;
  
  }
 
- module.exports= {createFood, getFoodItems}  
+   async function likeFood(req, res) {
+
+     
+
+    
+ try{ 
+ 
+ 
+
+  const user = req.user  ; 
+
+ const {foodId} = req.body ;
+ 
+ const isAlreadyLiked = await LikeModel.findOne
+ (
+     {user:user._id 
+    , food:foodId} 
+  
+  ) 
+
+   if(isAlreadyLiked) 
+    
+    {
+      await LikeModel.deleteOne(
+        {
+          user:user._id , 
+           food:foodId 
+        }
+      )  
+
+      return res.status(200).json({
+         message:"Food unliked successfully"
+     
+    }   
+  )
+   } 
+  
+   const like = await LikeModel.create({
+    user:user._id , 
+    food:foodId 
+   }) 
+
+    res.status(201).json({
+      message:"Food liked successfully" ,
+      like:like
+    }) 
+
+ } 
+
+  catch(err){
+    res.status(500).json({
+      message:"Something went wrong" + err.message,
+      error: err.message
+    })
+  }
+
+   }
+
+
+ module.exports= {createFood, getFoodItems, likeFood}  
  
 
  
