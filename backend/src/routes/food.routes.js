@@ -30,10 +30,12 @@ const authMiddleware = require('../middlewares/auth.middleware')
   
  
 
-  router.post('/' 
+  router.post('/like' 
     , authMiddleware.authUserMiddleware ,  
      foodController.likeFood)
  
+
+ router.post( 'save' , authMiddleware.authUserMiddleware , foodController.saveFood)
 
  module.exports = router ; 
 

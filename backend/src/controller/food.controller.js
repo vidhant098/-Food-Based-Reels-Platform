@@ -1,6 +1,6 @@
 const foodModel = require("../models/food.model")  ;
 const LikeModel  = require("../models/likes.model");
- 
+ const saveModel = require("../models/save.model")  ;
  const storageService = require("../services/storage.service")  ;
 
   const    { v4:uuid} =require("uuid") ; 
@@ -67,8 +67,6 @@ const LikeModel  = require("../models/likes.model");
 
    async function likeFood(req, res) {
 
-     
-
     
  try{ 
  
@@ -78,6 +76,11 @@ const LikeModel  = require("../models/likes.model");
 
  const {foodId} = req.body ;
  
+   if (!foodId) {
+      return res.status(400).json({ message: "Food ID is required" });
+    }
+
+
  const isAlreadyLiked = await LikeModel.findOne
  (
      {user:user._id 
@@ -95,17 +98,29 @@ const LikeModel  = require("../models/likes.model");
         }
       )  
 
+       await foodModel.findByIdAndUpdate(foodId, 
+       {
+        $inc: {likeCount:-1} 
+       })
+
+
       return res.status(200).json({
          message:"Food unliked successfully"
      
-    }   
-  )
+    })
    } 
   
-   const like = await LikeModel.create({
+   const like = await LikeModel.create(  {
     user:user._id , 
     food:foodId 
-   }) 
+   })  
+ 
+
+    await foodModel.findByIdAndUpdate(foodId , {
+      $inc:{likeCount:1}
+    })
+
+   
 
     res.status(201).json({
       message:"Food liked successfully" ,
@@ -123,8 +138,54 @@ const LikeModel  = require("../models/likes.model");
 
    }
 
+    async function saveFood(req  , res )
+    {
+      try{ 
 
- module.exports= {createFood, getFoodItems, likeFood}  
+         const {foodId} = req.body ; 
+
+
+         user = rew.user ; 
+          const isAlreadySaved  = saveModel.findOne({
+            user:user._id , 
+            food:foodId
+          }) 
+
+           if(isAlreadySaved)
+           {
+            await saveModel.deleteOne({
+              user:user._id , 
+              food:foodId
+            }) 
+
+
+
+            res.status(200).json({message : "Food removed successfully"})
+           } 
+
+        const savedFood = await saveModel.create({
+            user:user._id , 
+            food:foodId 
+           }) 
+ 
+            res.status(301).json({
+              message:"food saved successfully" , 
+              savedFoods: savedFood
+            })
+           
+
+      }
+      catch (err)
+      {
+         res.status(500).json({
+           message:"erroe is " + err.message,
+           error: err.message
+         })
+      }
+    }
+
+
+ module.exports= {createFood, getFoodItems, likeFood, saveFood}  
  
 
  
