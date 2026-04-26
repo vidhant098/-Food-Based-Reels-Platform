@@ -6,7 +6,7 @@
   const connectDB = require('./src/db/db')
 
   app.listen(process.env.PORT || 3000 , ()=>{
-    console.log("server is running in PRIVATE port ")
+    console.log("server is running  ")
   })
 
   connectDB() ;

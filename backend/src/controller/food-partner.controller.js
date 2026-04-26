@@ -1,11 +1,10 @@
 const mongoose  = require('mongoose')  
 
 const foodPartnerModel = require('../models/foodpartner.model')  
-
+const foodModel = require('../models/food.model')
  
  async  function getFoodPartnerById(req , res)
     { 
-
 
 
         try{
@@ -20,9 +19,11 @@ const foodPartnerModel = require('../models/foodpartner.model')
 
         } 
 
+        const foods = await foodModel.find({ foodPartnerId: foodPartnerId });
+
         res.status(200).json 
         ( 
-             {message : "Food Partner found" , foodPartner}
+             {message : "Food Partner found" , foodPartner, foods}
         )
         } 
 

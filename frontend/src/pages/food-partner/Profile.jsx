@@ -21,6 +21,7 @@ const Profile = () => {
         );
 
         setProfile(res.data.foodPartner);
+        setFoods(res.data.foods || []);
   console.log(id);
       } catch (err) {
         console.log(err.response?.data || err.message);

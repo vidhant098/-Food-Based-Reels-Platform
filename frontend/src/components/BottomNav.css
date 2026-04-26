@@ -1,0 +1,125 @@
+/* Mobile: Bottom Navigation (default) */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: #ffffff;
+  border-top: 1px solid #e5e4e7;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+.bottom-nav .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  text-decoration: none;
+  font-size: 0.65rem;
+  gap: 2px;
+  flex: 1;
+  height: 100%;
+  transition: color 0.2s ease;
+}
+
+.bottom-nav .nav-item.active,
+.bottom-nav .nav-item:hover {
+  color: #ff6b6b;
+}
+
+.bottom-nav .nav-item svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Dark mode - mobile */
+.bottom-nav.dark {
+  background: #111111;
+  border-top: 1px solid #333333;
+}
+
+.bottom-nav.dark .nav-item {
+  color: #aaaaaa;
+}
+
+.bottom-nav.dark .nav-item.active,
+.bottom-nav.dark .nav-item:hover {
+  color: #ff6b6b;
+}
+
+/* Desktop: Left Sidebar */
+@media (min-width: 768px) {
+  .bottom-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 72px;
+    height: 100vh;
+    background: #000000;
+    border-top: none;
+    border-right: 1px solid #222222;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    gap: 24px;
+  }
+
+  .bottom-nav .nav-item {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: 0.6rem;
+    font-weight: 500;
+    padding: 10px 0;
+    border-radius: 8px;
+    width: 56px;
+    height: auto;
+    box-sizing: border-box;
+    transition: background 0.2s ease, color 0.2s ease;
+    color: #eeeeee;
+  }
+
+  .bottom-nav .nav-item:hover {
+    background: #1a1a1a;
+  }
+
+  .bottom-nav .nav-item.active {
+    background: #1a1a1a;
+    color: #ff6b6b;
+    font-weight: 700;
+  }
+
+  .bottom-nav .nav-item svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  /* Dark mode - desktop */
+  .bottom-nav.dark {
+    background: #000000;
+    border-right: 1px solid #222222;
+  }
+
+  .bottom-nav.dark .nav-item {
+    color: #eeeeee;
+  }
+
+  .bottom-nav.dark .nav-item:hover {
+    background: #1a1a1a;
+  }
+
+  .bottom-nav.dark .nav-item.active {
+    background: #1a1a1a;
+    color: #ff6b6b;
+  }
+}
+

@@ -1,46 +1,62 @@
-const  express = require('express');
- const router = express.Router() ; 
- 
- const multer = require('multer')
+const express = require('express');
+const router = express.Router();
 
-const foodController = require('../controller/food.controller')
+const multer = require('multer');
 
-const authMiddleware = require('../middlewares/auth.middleware')
-   
+const foodController = require('../controller/food.controller');
 
+const authMiddleware = require('../middlewares/auth.middleware');
 
- const upload = multer({storage: multer.memoryStorage()},)
- 
+const upload = multer({ storage: multer.memoryStorage() });
 
-//  post/api/food/ protected/ create food item
-
-  // router.post('/'     ,upload.single('video'),  foodController.createFood) 
-  router.post(
+// POST /api/food/ - protected - create food item
+router.post(
   '/',
   authMiddleware.authFoodPartnerMiddleware,
   upload.single('video'),
   foodController.createFood
 );
 
-//  api for normal users  we have created new middleware for normal usr  
+// GET /api/food/ - protected - get all food items
+router.get(
+  "/",
+  authMiddleware.authUserMiddleware,
+  foodController.getFoodItems
+);
 
- router.get("/" 
-   ,authMiddleware.authUserMiddleware  
-    , foodController.getFoodItems) 
-  
- 
+// POST /api/food/like - protected - like/unlike food
+router.post(
+  '/like',
+  authMiddleware.authUserMiddleware,
+  foodController.likeFood
+);
 
-  router.post('/like' 
-    , authMiddleware.authUserMiddleware ,  
-     foodController.likeFood)
- 
+// POST /api/food/save - protected - save/unsave food
+router.post(
+  '/save',
+  authMiddleware.authUserMiddleware,
+  foodController.saveFood
+);
 
- router.post( 'save' , authMiddleware.authUserMiddleware , foodController.saveFood)
+// GET /api/food/saved - protected - get saved foods for logged-in user
+router.get(
+  '/saved',
+  authMiddleware.authUserMiddleware,
+  foodController.getSavedFoods
+);
 
- module.exports = router ; 
+// POST /api/food/comment - protected - add comment
+router.post(
+  '/comment',
+  authMiddleware.authUserMiddleware,
+  foodController.addComment
+);
 
+// GET /api/food/comment/:foodId - protected - get comments for a food
+router.get(
+  '/comment/:foodId',
+  authMiddleware.authUserMiddleware,
+  foodController.getComments
+);
 
-
-
-//  const file = req.file; // This is the actual file buffer
-// await uploadFile(file.buffer, file.originalname);
+module.exports = router;
