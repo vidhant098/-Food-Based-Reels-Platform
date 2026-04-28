@@ -18,9 +18,15 @@ router.post(
 );
 
 // GET /api/food/ - protected - get all food items
+// router.get(
+//   "/",
+//   authMiddleware.authUserMiddleware,
+//   foodController.getFoodItems
+// ); 
+
+
 router.get(
   "/",
-  authMiddleware.authUserMiddleware,
   foodController.getFoodItems
 );
 

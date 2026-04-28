@@ -33,7 +33,7 @@ const UserRegister = () => {
     })
     .catch((err) => {
       console.log("Error:", err.response?.data || err.message);
-      alert("Something went wrong");
+      alert("Something went wrong" + err );
     }); 
  
   };
@@ -69,7 +69,7 @@ const UserRegister = () => {
             <div className="form-group">
               <h2>Password</h2>
               <input 
-                name="password"   // ✅ IMPORTANT
+                name="password"   
                 type="password" 
                 placeholder="Create password"
                 required 

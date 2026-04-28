@@ -46,19 +46,19 @@ const bcrypt = require('bcrypt');
 
      const {email , password } = req.body; 
 
-      user = await userModel.findOne({email :email }) 
+      const user = await userModel.findOne({email :email }) 
 
       if(!user)
       {
-         res.status(400).json({message: 'invalid emai or password'})
+         return res.status(400).json({message: 'invalid email or password'})
       } 
 
      const isPasswordValid= await bcrypt.compare(password , user.password) ;  
 
        if(!isPasswordValid)
        {
-         res.status(400).json({message: 'invalid email or password'})
-       }  
+         return res.status(400).json({message: 'invalid email or password'})
+       }
 
         const token = jwt.sign(
         
@@ -137,8 +137,8 @@ const bcrypt = require('bcrypt');
        
        if(!foodPartner)
        {
-        res.status(400).json({message:"invalid email or password "})
-       } 
+        return res.status(400).json({message:"invalid email or password "})
+       }
 
           const isPasswordValid= await bcrypt.compare(password , foodPartner.password)  ;  
           if(!isPasswordValid)

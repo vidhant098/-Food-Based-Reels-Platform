@@ -3,6 +3,9 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import BottomNav from '../../components/BottomNav';
+import CommentModal from '../../components/CommentModal';
+import { useBookmarks } from '../../hooks/useBookmarks';
+import { useComments } from '../../hooks/useComments';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -10,13 +13,19 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [isDark, setIsDark] = useState(false);
   const [likedIds, setLikedIds] = useState(new Set());
-  const [savedIds, setSavedIds] = useState(new Set());
 
-  const [commentModalOpen, setCommentModalOpen] = useState(false);
-  const [activeFoodId, setActiveFoodId] = useState(null);
-  const [comments, setComments] = useState([]);
-  const [commentText, setCommentText] = useState('');
-  const [commentLoading, setCommentLoading] = useState(false);
+  const { isSaved, handleSave } = useBookmarks();
+
+  const {
+    commentModalOpen,
+    comments,
+    commentLoading,
+    commentText,
+    setCommentText,
+    openCommentModal,
+    closeCommentModal,
+    handleAddComment,
+  } = useComments(setFoods);
 
   useEffect(() => {
     const fetchFoods = async () => {
@@ -25,8 +34,9 @@ const Home = () => {
           withCredentials: true,
         });
         setFoods(response.data.foodItems || []);
-      } catch (err) {
-        console.error('API error:', err);
+      }
+         catch (err) {
+        console.log('API error:', err);
       } finally {
         setLoading(false);
       }
@@ -45,91 +55,51 @@ const Home = () => {
     localStorage.setItem('theme', newDark ? 'dark' : 'light');
   };
 
-  const handleLike = async (foodId) => {
-    try {
-      await axios.post('http://localhost:3000/api/food/like', { foodId }, { withCredentials: true });
-      const currentlyLiked = likedIds.has(foodId);
-      setLikedIds((prev) => {
-        const next = new Set(prev);
-        if (next.has(foodId)) next.delete(foodId);
-        else next.add(foodId);
-        return next;
-      });
-      setFoods((prev) =>
-        prev.map((f) => {
-          if (f._id === foodId) {
-            return { ...f, likeCount: (f.likeCount || 0) + (currentlyLiked ? -1 : 1) };
-          }
-          return f;
-        })
-      );
-    } catch (err) {
-      console.error('Like error', err);
-    }
-  };
+ const handleLike = async (foodId) => {
 
-  const handleSave = async (foodId) => {
-    try {
-      await axios.post('http://localhost:3000/api/food/save', { foodId }, { withCredentials: true });
-      setSavedIds((prev) => {
-        const next = new Set(prev);
-        if (next.has(foodId)) next.delete(foodId);
-        else next.add(foodId);
-        return next;
-      });
-    } catch (err) {
-      console.error('Save error', err);
-    }
-  };
+  const currentlyLiked = likedIds.has(foodId);
 
-  const openCommentModal = async (foodId) => {
-    setActiveFoodId(foodId);
-    setCommentModalOpen(true);
-    setCommentLoading(true);
-    try {
-      const res = await axios.get(`http://localhost:3000/api/food/comment/${foodId}`, {
-        withCredentials: true,
-      });
-      setComments(res.data.comments || []);
-    } catch (err) {
-      console.error('Fetch comments error', err);
-    } finally {
-      setCommentLoading(false);
-    }
-  };
+  try {
+    await axios.post(
+      'http://localhost:3000/api/food/like',
+      { foodId },
+      { withCredentials: true }
+    );
 
-  const closeCommentModal = () => {
-    setCommentModalOpen(false);
-    setActiveFoodId(null);
-    setComments([]);
-    setCommentText('');
-  };
+    // ✅ toggle likedIds
+    setLikedIds((prev) => {
+      const next = new Set(prev);
 
-  const handleAddComment = async () => {
-    if (!commentText.trim() || !activeFoodId) return;
-    setCommentLoading(true);
-    try {
-      const res = await axios.post(
-        'http://localhost:3000/api/food/comment',
-        { foodId: activeFoodId, text: commentText.trim() },
-        { withCredentials: true }
-      );
-      setComments((prev) => [res.data.comment, ...prev]);
-      setCommentText('');
-      setFoods((prev) =>
-        prev.map((f) => {
-          if (f._id === activeFoodId) {
-            return { ...f, commentCount: (f.commentCount || 0) + 1 };
-          }
-          return f;
-        })
-      );
-    } catch (err) {
-      console.error('Add comment error', err);
-    } finally {
-      setCommentLoading(false);
+      if (next.has(foodId)) next.delete(foodId);
+      else next.add(foodId);
+
+      return next;
+    });
+
+    // ✅ update like count
+    setFoods((prev) =>
+      prev.map((f) =>
+        f._id === foodId
+          ? {
+              ...f,
+              likeCount: (f.likeCount || 0) + (currentlyLiked ? -1 : 1),
+            }
+          : f
+      )
+    );
+
+  } catch (err) {
+
+    // 🔥 LOGIN REDIRECT
+    if (err.response?.status === 401) {
+      alert('Please login first  to like foods');
+      navigate("/user/login");
+      return;
     }
-  };
+
+    console.error("Like error", err);
+  }
+};
 
   const visitProfile = (partnerId) => {
     if (partnerId) navigate(`/food-partner/${partnerId}`);
@@ -199,10 +169,10 @@ const Home = () => {
               </button>
 
               <button className="action-btn" onClick={() => handleSave(food._id)}>
-                <svg viewBox="0 0 24 24" width="28" height="28" fill={savedIds.has(food._id) ? 'white' : 'none'} stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill={isSaved(food._id) ? 'white' : 'none'} stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
                 </svg>
-                <span>{savedIds.has(food._id) ? 'Saved' : 'Save'}</span>
+                <span>{isSaved(food._id) ? 'Saved' : 'Save'}</span>
               </button>
 
               <button className="action-btn">
@@ -220,42 +190,15 @@ const Home = () => {
         </section>
       ))}
 
-      {commentModalOpen && (
-        <div className="comment-modal-overlay" onClick={closeCommentModal}>
-          <div className="comment-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="comment-modal-header">
-              <h3>Comments</h3>
-              <button className="close-btn" onClick={closeCommentModal}>✕</button>
-            </div>
-            <div className="comment-list">
-              {commentLoading && comments.length === 0 ? (
-                <p className="comment-loading">Loading comments...</p>
-              ) : comments.length === 0 ? (
-                <p className="comment-empty">No comments yet. Be the first!</p>
-              ) : (
-                comments.map((c) => (
-                  <div key={c._id} className="comment-item">
-                    <span className="comment-user">{c.user?.fullName || 'User'}</span>
-                    <span className="comment-text">{c.text}</span>
-                  </div>
-                ))
-              )}
-            </div>
-            <div className="comment-input-area">
-              <input
-                type="text"
-                placeholder="Add a comment..."
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleAddComment()}
-              />
-              <button onClick={handleAddComment} disabled={commentLoading || !commentText.trim()}>
-                Post
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <CommentModal
+        isOpen={commentModalOpen}
+        onClose={closeCommentModal}
+        comments={comments}
+        commentLoading={commentLoading}
+        commentText={commentText}
+        setCommentText={setCommentText}
+        onAddComment={handleAddComment}
+      />
 
       <BottomNav isDark={isDark} />
     </div>
