@@ -8,8 +8,8 @@ const foodModel = require('../models/food.model')
 
 
         try{
-   const foodPartnerId = req.params.id ;
-   const foodPartner = await foodPartnerModel.findById(foodPartnerId)
+             const foodPartnerId = req.params.id ;
+             const foodPartner = await foodPartnerModel.findById(foodPartnerId)
     // res.status(200).json(foodPartner) 
 
 

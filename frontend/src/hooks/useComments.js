@@ -35,7 +35,7 @@ export const useComments = (setFoods) => {
     if (!commentText.trim() || !activeFoodId) return;
     setCommentLoading(true);
     try {
-      const res = await axios.post(
+      const res = await axios.post( 
         'http://localhost:3000/api/food/comment',
         { foodId: activeFoodId, text: commentText.trim() },
         { withCredentials: true }

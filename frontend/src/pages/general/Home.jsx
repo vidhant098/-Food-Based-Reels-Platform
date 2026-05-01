@@ -66,7 +66,7 @@ const Home = () => {
       { withCredentials: true }
     );
 
-    // ✅ toggle likedIds
+  
     setLikedIds((prev) => {
       const next = new Set(prev);
 
@@ -102,10 +102,14 @@ const Home = () => {
 };
 
   const visitProfile = (partnerId) => {
-    if (partnerId) navigate(`/food-partner/${partnerId}`);
-  };
+    if (partnerId) 
+      navigate(`/food-partner/${partnerId}`);
+  }; 
+   
+   
 
-  if (loading) {
+  if (loading)
+{
     return <div className={`loading-screen ${isDark ? 'dark' : ''}`}>Loading reels...</div>;
   }
 
@@ -128,6 +132,7 @@ const Home = () => {
           />
           <div className="reel-overlay">
             <div className="reel-info">
+
               <h3 className="food-name">{food.name}</h3>
               <p className="food-desc">{food.description}</p>
               <p className="food-creator">
@@ -140,6 +145,7 @@ const Home = () => {
                     >
                       {food.foodPartnerId.businessName || food.foodPartnerId.ownerName}
                     </span>
+                    
                     <button
                       className="visit-btn"
                       onClick={() => visitProfile(food.foodPartnerId._id)}
@@ -168,11 +174,12 @@ const Home = () => {
                 <span>{food.commentCount || 0}</span>
               </button>
 
-              <button className="action-btn" onClick={() => handleSave(food._id)}>
+              <button className="action-btn" onClick={() => handleSave(food._id)}> 
+                
                 <svg viewBox="0 0 24 24" width="28" height="28" fill={isSaved(food._id) ? 'white' : 'none'} stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
                 </svg>
-                <span>{isSaved(food._id) ? 'Saved' : 'Save'}</span>
+                <span>{isSaved(food._id) ? 'Saved' : 'Save'}</span>  
               </button>
 
               <button className="action-btn">

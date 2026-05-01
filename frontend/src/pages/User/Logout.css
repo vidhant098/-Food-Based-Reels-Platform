@@ -1,0 +1,90 @@
+.logout-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.logout-card {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  max-width: 400px;
+  width: 100%;
+}
+
+.logout-card h2 {
+  margin-bottom: 0.5rem;
+  color: #262626;
+}
+
+.logout-card p {
+  color: #8e8e8e;
+  margin-bottom: 1.5rem;
+}
+
+.logout-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.btn-cancel {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #f0f0f0;
+  color: #262626;
+  transition: background 0.2s;
+}
+
+.btn-cancel:hover {
+  background: #e0e0e0;
+}
+
+.btn-logout {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #ed4956;
+  color: white;
+  transition: background 0.2s;
+}
+
+.btn-logout:hover {
+  background: #c73c44;
+}
+
+@media (prefers-color-scheme: dark) {
+  .logout-card {
+    background: #1a1a1a;
+  }
+
+  .logout-card h2 {
+    color: #f0f0f0;
+  }
+
+  .logout-card p {
+    color: #a0a0a0;
+  }
+
+  .btn-cancel {
+    background: #3a3a3a;
+    color: #f0f0f0;
+  }
+
+  .btn-cancel:hover {
+    background: #4a4a4a;
+  }
+}
