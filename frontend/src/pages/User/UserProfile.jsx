@@ -42,7 +42,7 @@ const UserProfile = () => {
       } catch (err) {
         if (err.response?.status === 401) {
           alert('You are not logged in yet');
-          alert('Redirecting You for login');
+       
           navigate('/user/login');
         } else {
           console.log('Error fetching user:', err);
@@ -61,7 +61,8 @@ const UserProfile = () => {
         withCredentials: true
       });
       navigate('/user/login');
-    } catch (err) {
+    }
+     catch (err) {
       console.log('Error logging out:', err);
     }
   };

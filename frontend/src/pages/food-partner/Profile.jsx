@@ -106,7 +106,8 @@ const Profile = () => {
                 />
               ) : null}
               <div className="video-overlay">
-                {food.name}
+                <span>{food.name}</span>
+                {food.price && <strong>₹{food.price}</strong>}
               </div>
             </div>
           ))}

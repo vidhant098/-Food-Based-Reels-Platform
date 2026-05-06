@@ -10,9 +10,10 @@ const CreateFood = () => {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [foodName, setFoodName] = useState('');
   const [description, setDescription] = useState('');
-  const [previewUrl, setPreviewUrl] = useState('');
+  const [price, setPrice] = useState('');
+  const [previewUrl, setPreviewUrl] = useState(''); 
   const [showSuccess, setShowSuccess] = useState(false); // ✅ NEW
-  const [loading, setLoading] = useState(false); // ✅ NEW
+  const [loading, setLoading] = useState(false); // ✅ NEW 
 
   useEffect(() => {
     if (!selectedVideo) {
@@ -36,7 +37,7 @@ const CreateFood = () => {
   const onsubmit = async (e) => {
     e.preventDefault();
 
-    if (!foodName || !description || !selectedVideo) {
+    if (!foodName || !description || !price || !selectedVideo) {
       alert("Please fill all fields");
       return;
     }
@@ -45,6 +46,7 @@ const CreateFood = () => {
     formData.append('name', foodName);
     formData.append('description', description);
     formData.append('video', selectedVideo);
+    formData.append('price', price ) ; 
 
     try {
       setLoading(true);
@@ -58,20 +60,25 @@ const CreateFood = () => {
       console.log(response.data);
 
       setShowSuccess(true); // ✅ popup show
+      const foodPartnerId = response.data?.food?.foodPartnerId;
 
       // reset form
       setFoodName('');
       setDescription('');
+      setPrice('');
       setSelectedVideo(null);
 
       // redirect after 2 sec
       setTimeout(() => {
-        navigate('/food-partner/profile');
+        if (foodPartnerId) {
+          navigate(`/food-partner/${foodPartnerId}`);
+        }
       }, 2000);
 
     } catch (err) {
 
-      if (err.response?.status === 401) {
+      if (err.response?.status === 401) { 
+        alert("Login as Food Partner")
         navigate('/food-partner/login');
         return;
       }
@@ -104,7 +111,9 @@ const CreateFood = () => {
               <span className="field-label">Food Video</span> 
 
               <div className="upload-box"> 
-                <span className="upload-title">Tap to choose a video</span> 
+
+                <span className="upload-title">Tap to choose a video</span>
+
                 <span className="upload-copy">
                   MP4, MOV, or WebM clips work best for food reels.
                 </span>
@@ -129,6 +138,21 @@ const CreateFood = () => {
                 placeholder="Example: Smoky Tandoori Burger"
                 value={foodName}
                 onChange={(e) => setFoodName(e.target.value)}
+              />
+            </label> 
+
+            <label className="create-food-field" htmlFor="food-price">
+              <span className="field-label">Price</span>
+              <input
+                id="food-price"
+                type="number"
+                min="0"
+                step="1"
+                inputMode="numeric"
+                placeholder="Example: 149"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                required
               />
             </label>
 
@@ -173,6 +197,7 @@ const CreateFood = () => {
 
               <div className="preview-content">
                 <h2>{foodName || 'Your food name'}</h2>
+                <span className="preview-price">{price ? `₹${price}` : 'Set your price'}</span>
                 <p>
                   {description ||
                     'Add a short and tempting description so customers know what makes this dish worth ordering.'}
@@ -186,7 +211,8 @@ const CreateFood = () => {
         {showSuccess && (
           <div className="success-popup">
             <h2>🎉 Success!</h2>
-            <p>Your food has been uploaded</p>
+            <p>Your food has been uploaded</p> 
+
           </div>
         )}
 

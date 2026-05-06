@@ -31,7 +31,7 @@ const AppRoutes = () => {
         <Route path="/create-food" element={<CreateFood />} />
         <Route path='/food-partner/:id' element={<Profile />} />
 
-<Route  path='/user/profile'   element={ <UserProfile/>}/>
+         <Route  path='/user/profile'   element={ <UserProfile/>}/>
 
         <Route path='/user/logout' element={<Logout />} />
 

@@ -67,6 +67,20 @@
   margin-bottom: 6px;
 }
 
+.food-price {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-bottom: 8px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.92), rgba(255, 159, 67, 0.92));
+  color: #fff;
+  font-size: 0.86rem;
+  font-weight: 800;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.28);
+}
+
 .food-desc {
   font-size: 0.9rem;
   line-height: 1.3;

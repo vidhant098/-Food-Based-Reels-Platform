@@ -14,6 +14,7 @@ router.post('/foodpartner/register' , authController.registerFoodPartner)
 
 router.post('/foodpartner/login' , authController.loginFoodpartner  )
 
+
 router.post('/foodpartner/logout' , authController.logoutFoodPartner)
 
 

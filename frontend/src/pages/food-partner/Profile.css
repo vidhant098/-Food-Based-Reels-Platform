@@ -235,9 +235,25 @@
   font-size: 0.8rem;
   font-weight: 600;
   text-align: center;
+  display: grid;
+  gap: 0.25rem;
+  justify-items: center;
+}
+
+.video-overlay span {
+  max-width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.video-overlay strong {
+  width: fit-content;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff6b6b, #ff9f43);
+  color: #fff;
+  font-size: 0.72rem;
 }
 
 /* Loading State */

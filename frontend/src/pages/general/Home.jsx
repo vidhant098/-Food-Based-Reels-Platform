@@ -134,6 +134,7 @@ const Home = () => {
             <div className="reel-info">
 
               <h3 className="food-name">{food.name}</h3>
+              {food.price && <span className="food-price">₹{food.price}</span>}
               <p className="food-desc">{food.description}</p>
               <p className="food-creator">
                 {food.foodPartnerId ? (

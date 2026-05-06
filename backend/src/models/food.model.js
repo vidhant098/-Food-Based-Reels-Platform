@@ -12,19 +12,28 @@ const foodSchema = new mongoose.Schema({
   description: {
     type: String,
   },
+
   foodPartnerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "foodpartner"
   },
+
   likeCount: {
     type: Number,
     default: 0
   },
+
   commentCount: {
     type: Number,
     default: 0
-  }
-});
+  }, 
+   price:{
+     type :String
+   }  
+
+
+   
+},{timestamps: true});
 
 const foodModel = mongoose.model("food", foodSchema);
 

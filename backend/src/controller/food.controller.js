@@ -24,6 +24,7 @@ async function createFood(req, res) {
       description: req.body.description,
       video: fileUploadResult.url,
       foodPartnerId: req.foodPartner._id,
+      price: req.body.price
     });
 
     return res.status(201).json({

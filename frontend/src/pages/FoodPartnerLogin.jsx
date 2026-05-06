@@ -21,19 +21,24 @@ const FoodPartnerLogin = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/auth/food-partner/login",
+        "http://localhost:3000/api/auth/foodpartner/login",
         { email, password },
         { withCredentials: true }
       );
 
       console.log("Login Success:", response.data);
-
+       alert("login successfull")
       navigate("/create-food");
 
-    } catch (err) {
-      const message = err.response?.data?.message || "Login failed";
-      setError(message);
-    } finally {
+    } catch (err) 
+    {
+      const message = err.response?.data?.message || "Login failed"; 
+
+       console.log(err )
+      setError(message); 
+       alert('login failed')
+    }
+     finally {
       setLoading(false);   
     }
   };
@@ -75,7 +80,7 @@ const FoodPartnerLogin = () => {
               className="submit-btn"
               disabled={loading}
             >
-              {loading ? "Logging in..." : "Sign In as Partner"}
+              {loading ? "Logging in..." : "Log in as Partner"}
             </button>
 
           </form>

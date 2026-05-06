@@ -165,13 +165,13 @@ npm start
 Create a `.env` file in backend:
 
 ```
-PORT=3000
-MONGO_URI=your_mongodb_url
-JWT_SECRET=your_secret
+PORT= local host Port_number
+MONGO_URI=My_mongodb_url
+JWT_SECRET=My_secret
 
-IMAGEKIT_PUBLIC_KEY=your_key
-IMAGEKIT_PRIVATE_KEY=your_key
-IMAGEKIT_URL_ENDPOINT=your_url
+IMAGEKIT_PUBLIC_KEY=My_key
+IMAGEKIT_PRIVATE_KEY=My_key
+IMAGEKIT_URL_ENDPOINT=My_url
 ```
 
 ---
