@@ -69,10 +69,8 @@ const CreateFood = () => {
       setSelectedVideo(null);
 
       // redirect after 2 sec
-      setTimeout(() => {
-        if (foodPartnerId) {
-          navigate(`/food-partner/${foodPartnerId}`);
-        }
+setTimeout(() => {
+        navigate('/foodPartnerOwn/profile');
       }, 2000);
 
     } catch (err) {
@@ -81,7 +79,9 @@ const CreateFood = () => {
         alert("Login as Food Partner")
         navigate('/food-partner/login');
         return;
-      }
+      } 
+        
+      navigate('/foodPartnerOwn/profile')
 
       console.error("Upload error:", err);
 

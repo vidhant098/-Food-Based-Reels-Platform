@@ -5,9 +5,15 @@ const express = require('express');
   authMiddlwere = require('../middlewares/auth.middleware') ;
     const router = express.Router() ;
 
+    router.get('/profile' , 
+         authMiddlwere.authFoodPartnerMiddleware, 
+        foodPartnerController.foodPartnerProfile ) 
+
+
 router.get("/:id" 
    , authMiddlwere.authUserMiddleware ,
-    foodPartnerController.getFoodPartnerById )
+    foodPartnerController.getFoodPartnerById ) 
 
+      
 
    module.exports = router ;

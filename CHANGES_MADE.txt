@@ -1,0 +1,21 @@
+Changes made to fix: "profile not visible after adding food"
+
+1) frontend/src/pages/food-partner/CreateFood.jsx
+- After successful food upload, redirect was changed.
+- Old:
+  navigate(`/food-partner/${foodPartnerId}`);
+  (This route renders the public Profile page)
+- New:
+  navigate('/foodPartnerOwn/profile');
+  (This route renders MyProfile)
+
+2) frontend/src/routes/AppRoutes.jsx
+- Removed stray trailing character 'h' after the /user/login route definition.
+
+3) backend/src/app.js
+- Adjusted CORS origin to avoid credential/cookie issues that were causing auth failures.
+- Changed:
+  origin: 'http://localhost:5173'
+  to:
+  origin: true
+

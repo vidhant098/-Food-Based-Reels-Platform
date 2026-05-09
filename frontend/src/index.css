@@ -1,3 +1,10 @@
+@import "tailwindcss/preflight";
+@import "tailwindcss/utilities";
+
+
+/* ensure Tailwind utilities aren't overridden by older global rules */
+*{ box-sizing: border-box; }
+
 :root {
   --text: #6b6375;
   --text-h: #08060d;

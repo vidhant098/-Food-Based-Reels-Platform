@@ -28,7 +28,7 @@ const FoodPartnerLogin = () => {
 
       console.log("Login Success:", response.data);
        alert("login successfull")
-      navigate("/create-food");
+      navigate("/foodPartnerOwn/profile");
 
     } catch (err) 
     {

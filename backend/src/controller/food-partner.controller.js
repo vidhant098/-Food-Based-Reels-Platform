@@ -15,7 +15,7 @@ const foodModel = require('../models/food.model')
 
      if(!foodPartner)
         {
-            return res.status(404).json({message : "Food Partner not found"})  ; 
+            return res.status(404).json({message :"Food Partner not found"})  ; 
 
         } 
 
@@ -34,5 +34,38 @@ const foodModel = require('../models/food.model')
         }
     }
   
+    async function foodPartnerProfile(req, res) {
 
-    module.exports = {getFoodPartnerById}
+    try {
+
+        const foodPartner = await foodPartnerModel.findById(
+            req.foodPartner._id
+        );
+
+        const foods = await foodModel.find({
+            foodPartnerId: req.foodPartner._id
+        });
+
+        console.log(req.foodPartner._id);
+
+        console.log(foodPartner);
+
+        res.status(200).json({
+            message: "food partner profile fetched successfully",
+            foodPartner,
+            foods
+        });
+
+    } catch (err) {
+
+        console.log(err);
+
+        res.status(500).json({
+            message: err.message
+        });
+    }
+}
+      
+  
+
+    module.exports = {getFoodPartnerById, foodPartnerProfile}

@@ -63,6 +63,7 @@ router.get(
   '/comment/:foodId',
   authMiddleware.authUserMiddleware,
   foodController.getComments
-);
+);  
+  
 
 module.exports = router;

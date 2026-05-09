@@ -176,14 +176,14 @@ const bcrypt = require('bcrypt');
    async function getCurrentUser(req , res ){
       
      try{
-const user  = req.user ;
+         const user  = req.user ;
    
- res.status(200).json(
-  {
+      res.status(200).json(
+     {
     message:"current user fetched successfully " ,    
     user
-  }
- )
+    }
+      )
 
      }
 
@@ -197,7 +197,7 @@ const user  = req.user ;
      }
 
      
-   }
+   } 
 
 
   module.exports = { registerUser  , 

@@ -1,0 +1,72 @@
+/* FoodPartner MyProfile - extra styling to ensure reels/video cards look premium */
+
+.myprofile-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0b0f1a 0%, #0a1222 50%, #070a12 100%);
+  color: #ffffff;
+}
+
+.myprofile-shell {
+  position: relative;
+  overflow: hidden;
+}
+
+.myprofile-shell::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: radial-gradient(circle at 20% 10%, rgba(255, 209, 102, 0.18), transparent 35%),
+    radial-gradient(circle at 80% 20%, rgba(252, 211, 77, 0.12), transparent 35%),
+    radial-gradient(circle at 50% 90%, rgba(45, 212, 191, 0.12), transparent 45%);
+  pointer-events: none;
+}
+
+.myprofile-hero {
+  position: relative;
+  z-index: 2;
+}
+
+.reel-card {
+  cursor: pointer;
+}
+
+.reel-card video {
+  transform: translateZ(0);
+}
+
+.reel-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.65), rgba(249, 115, 22, 0.55), rgba(45, 212, 191, 0.55), rgba(124, 58, 237, 0.55));
+  opacity: 0;
+  transition: opacity 200ms ease;
+  pointer-events: none;
+}
+
+.reel-card:hover::before {
+  opacity: 1;
+}
+
+.reel-card {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+
+.reel-overlay {
+  opacity: 1;
+}
+
+/* Make sure grid stays 3-per-row on most screens */
+@media (max-width: 768px) {
+  .reel-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 769px) {
+  .reel-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+

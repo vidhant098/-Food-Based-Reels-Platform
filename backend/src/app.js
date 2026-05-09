@@ -15,7 +15,7 @@
 
     app.use(cors( 
 {
-  origin: 'http://localhost:5173', 
+  origin: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }
@@ -31,7 +31,9 @@
      
       app.use('/api/food' , foodRoutes)     
 
-       app.use('/api/food-partner' ,  foodpartnerRoutes)
+       app.use('/api/food-partner' ,  foodpartnerRoutes) 
+        
+        
 
      
      module.exports = app ; 
