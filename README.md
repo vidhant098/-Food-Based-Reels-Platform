@@ -23,7 +23,8 @@ A full-stack reels-style web application where users can explore short food vide
 * When accessing the **“Add Food”** feature:
 
   * Non-registered users are redirected to food partner registration
-  * Registered food partners are redirected to their profile
+  * Registered food partners are redirected to their profile 
+  *food partner can also see their profile and manage their uploaded content
 * Food partners can view and manage their uploaded food content
 
 ---

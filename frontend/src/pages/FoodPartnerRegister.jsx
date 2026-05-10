@@ -46,7 +46,7 @@ const FoodPartnerRegister = () => {
 
       console.log(response.data);
 
-      navigate('/create-food');  
+      navigate('/foodPartnerOwn/profile');  
 
     } 
     catch(err){ 

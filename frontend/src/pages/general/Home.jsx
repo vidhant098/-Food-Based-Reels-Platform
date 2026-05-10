@@ -123,8 +123,8 @@ const Home = () => {
         <section key={food._id} className="reel-item">
           <video
             src={food.video}
-            autoPlay
-            loop
+            autoPlay={false}
+            
             muted
             playsInline
             preload="metadata"
