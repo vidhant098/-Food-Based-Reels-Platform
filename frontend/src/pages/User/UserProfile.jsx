@@ -7,8 +7,11 @@ import './UserProfile.css';
 const UserProfile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [posts, setPosts] = useState([]);
-  const [activeTab, setActiveTab] = useState('posts');
+  const [likedVideos, setLikedVideos] = useState([]);
+  const [savedVideos, setSavedVideos] = useState([]);
+  const [activeTab, setActiveTab] = useState('liked');
+  const [loggingOut, setLoggingOut] = useState(false);
+  const [logoutError, setLogoutError] = useState('');
   const navigate = useNavigate();
 
   // Get initials for profile placeholder
@@ -30,14 +33,29 @@ const UserProfile = () => {
         });
         setUser(userRes.data.user);
 
-        // Fetch user's posts
+        // Fetch liked and saved videos
         try {
-          const postsRes = await axios.get('http://localhost:3000/api/food/user', {
-            withCredentials: true
-          });
-          setPosts(postsRes.data.foods || []);
-        } catch (postErr) {
-          console.log('No posts found or error fetching posts:', postErr);
+          const [likedRes, savedRes] = await Promise.all([
+            axios.get('http://localhost:3000/api/food/liked', {
+              withCredentials: true
+            }),
+            axios.get('http://localhost:3000/api/food/saved', {
+              withCredentials: true
+            })
+          ]);
+
+          setLikedVideos(
+            (likedRes.data.likedFoods || [])
+              .map((item) => item.food)
+              .filter(Boolean)
+          );
+          setSavedVideos(
+            (savedRes.data.savedFoods || [])
+              .map((item) => item.food)
+              .filter(Boolean)
+          );
+        } catch (videoErr) {
+          console.log('Error fetching liked/saved videos:', videoErr);
         }
       } catch (err) {
         if (err.response?.status === 401) {
@@ -56,16 +74,74 @@ const UserProfile = () => {
   }, [navigate]);
 
   const handleLogout = async () => {
+    setLoggingOut(true);
+    setLogoutError('');
     try {
-      await axios.post('http://localhost:3000/api/auth/logout', {}, {
+      await axios.post('http://localhost:3000/api/auth/user/logout', {}, {
         withCredentials: true
       });
-      navigate('/user/login');
+      localStorage.removeItem('userToken');
+      localStorage.removeItem('theme');
+      setUser(null);
+      navigate('/user/login', { replace: true });
     }
      catch (err) {
       console.log('Error logging out:', err);
+      setLogoutError('Logout failed. Please try again.');
+    } finally {
+      setLoggingOut(false);
     }
   };
+
+  const renderVideoGrid = (items, emptyIcon, emptyTitle, emptyText) => (
+    <div className="posts-grid">
+      {items.length > 0 ? (
+        items.map((item) => (
+          <div key={item._id} className="post-item">
+            {item.video ? (
+              <video
+                src={item.video}
+                className="post-image"
+                muted
+                playsInline
+                preload="metadata"
+              />
+            ) : item.imageUrl ? (
+              <img
+                src={item.imageUrl}
+                alt={item.name || item.title || 'Food video'}
+                className="post-image"
+              />
+            ) : (
+              <div className="post-image post-placeholder">
+                {item.name?.slice(0, 1) || 'F'}
+              </div>
+            )}
+            <div className="post-overlay">
+              <div className="post-stat">
+                <span className="post-stat-icon">♥</span>
+                <span>{item.likeCount || 0}</span>
+              </div>
+              <div className="post-stat">
+                <span className="post-stat-icon">▣</span>
+                <span>Video</span>
+              </div>
+            </div>
+            <div className="post-caption">
+              <span>{item.name || 'Food video'}</span>
+              {item.price ? <strong>Rs {item.price}</strong> : null}
+            </div>
+          </div>
+        ))
+      ) : (
+        <div className="empty-posts">
+          <div className="empty-icon">{emptyIcon}</div>
+          <h3 className="empty-title">{emptyTitle}</h3>
+          <p className="empty-text">{emptyText}</p>
+        </div>
+      )}
+    </div>
+  );
 
   if (loading) {
     return (
@@ -120,24 +196,31 @@ const UserProfile = () => {
               <button className="btn-edit-profile" onClick={() => navigate('/user/edit')}>
                 Edit Profile
               </button>
-              <button className="btn-follow" onClick={handleLogout}>
-                Log Out
+              <button
+                type="button"
+                className="btn-follow btn-logout"
+                onClick={handleLogout}
+                disabled={loggingOut}
+                aria-busy={loggingOut}
+              >
+                {loggingOut ? 'Logging out...' : 'Log Out'}
               </button>
             </div>
+            {logoutError && <p className="logout-feedback">{logoutError}</p>}
           </div>
 
           <div className="profile-stats">
             <div className="stat-item">
-              <span className="stat-number">{posts.length}</span>
-              <span className="stat-label">posts</span>
+              <span className="stat-number">{likedVideos.length}</span>
+              <span className="stat-label">liked</span>
             </div>
             <div className="stat-item">
-              <span className="stat-number">0</span>
-              <span className="stat-label">followers</span>
+              <span className="stat-number">{savedVideos.length}</span>
+              <span className="stat-label">saved</span>
             </div>
             <div className="stat-item">
-              <span className="stat-number">0</span>
-              <span className="stat-label">following</span>
+              <span className="stat-number">{likedVideos.length + savedVideos.length}</span>
+              <span className="stat-label">videos</span>
             </div>
           </div>
 
@@ -163,68 +246,36 @@ const UserProfile = () => {
       {/* Content Tabs */}
       <div className="content-tabs">
         <div
-          className={`tab-item ${activeTab === 'posts' ? 'active' : ''}`}
-          onClick={() => setActiveTab('posts')}
+          className={`tab-item ${activeTab === 'liked' ? 'active' : ''}`}
+          onClick={() => setActiveTab('liked')}
         >
-          <span className="tab-icon">▦</span>
-          <span className="tab-label">Posts</span>
+          <span className="tab-icon">♥</span>
+          <span className="tab-label">Liked Videos</span>
         </div>
         <div
           className={`tab-item ${activeTab === 'saved' ? 'active' : ''}`}
           onClick={() => setActiveTab('saved')}
         >
           <span className="tab-icon">★</span>
-          <span className="tab-label">Saved</span>
+          <span className="tab-label">Saved Videos</span>
         </div>
       </div>
 
-      {/* Posts Grid */}
-      {activeTab === 'posts' && (
-        <div className="posts-grid">
-          {posts.length > 0 ? (
-            posts.map((post) => (
-              <div key={post._id} className="post-item">
-                {post.imageUrl ? (
-                  <img
-                    src={post.imageUrl}
-                    alt={post.title}
-                    className="post-image"
-                  />
-                ) : (
-                  <div className="post-image" style={{ background: '#2a2a4a' }}></div>
-                )}
-                <div className="post-overlay">
-                  <div className="post-stat">
-                    <span className="post-stat-icon">♥</span>
-                    <span>{post.likes?.length || 0}</span>
-                  </div>
-                  <div className="post-stat">
-                    <span className="post-stat-icon">💬</span>
-                    <span>{post.comments?.length || 0}</span>
-                  </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="empty-posts">
-              <div className="empty-icon">📷</div>
-              <h3 className="empty-title">No Posts Yet</h3>
-              <p className="empty-text">Start sharing your food adventures!</p>
-            </div>
-          )}
-        </div>
-      )}
+      {activeTab === 'liked' &&
+        renderVideoGrid(
+          likedVideos,
+          '♥',
+          'No Liked Videos',
+          'Videos you like will show here.'
+        )}
 
-      {/* Saved Tab */}
-      {activeTab === 'saved' && (
-        <div className="posts-grid">
-          <div className="empty-posts">
-            <div className="empty-icon">★</div>
-            <h3 className="empty-title">No Saved Posts</h3>
-            <p className="empty-text">Save posts you love to see them here!</p>
-          </div>
-        </div>
-      )}
+      {activeTab === 'saved' &&
+        renderVideoGrid(
+          savedVideos,
+          '★',
+          'No Saved Videos',
+          'Save videos you love to see them here.'
+        )}
 
       <BottomNav />
     </div>

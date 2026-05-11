@@ -51,6 +51,13 @@ router.get(
   foodController.getSavedFoods
 );
 
+// GET /api/food/liked - protected - get liked foods for logged-in user
+router.get(
+  '/liked',
+  authMiddleware.authUserMiddleware,
+  foodController.getLikedFoods
+);
+
 // POST /api/food/comment - protected - add comment
 router.post(
   '/comment',

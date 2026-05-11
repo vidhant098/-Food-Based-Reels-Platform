@@ -168,6 +168,31 @@ async function getSavedFoods(req, res) {
   }
 }
 
+async function getLikedFoods(req, res) {
+  try {
+    const user = req.user;
+    const likedItems = await LikeModel.find({ user: user._id })
+      .populate({
+        path: 'food',
+        populate: {
+          path: 'foodPartnerId',
+          select: 'ownerName businessName'
+        }
+      })
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      message: "Liked foods fetched successfully",
+      likedFoods: likedItems
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Something went wrong: " + err.message,
+      error: err.message
+    });
+  }
+}
+
 async function addComment(req, res) {
   try {
     const user = req.user;
@@ -225,7 +250,7 @@ async function getComments(req, res) {
   }
 }
 
-module.exports = { createFood, getFoodItems, likeFood, saveFood, getSavedFoods, addComment, getComments }
+module.exports = { createFood, getFoodItems, likeFood, saveFood, getSavedFoods, getLikedFoods, addComment, getComments }
  
 
  

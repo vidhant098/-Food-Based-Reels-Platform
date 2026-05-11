@@ -4,15 +4,15 @@ import { Link } from 'react-router-dom';
 import BottomNav from '../../components/BottomNav';
 import './MyProfile.css';
 
-const formatPrice = (p) => {
-  const n = typeof p === 'string' ? Number(p) : p;
-  if (Number.isFinite(n) && n > 0) return `₹${n}`;
-  return '';
+const formatPrice = (price) => {
+  const amount = typeof price === 'string' ? Number(price) : price;
+  return Number.isFinite(amount) && amount > 0 ? `Rs ${amount}` : 'Menu ready';
 };
 
+const getPhone = (partner) => partner?.phone || partner?.Phone || 'Not added';
 
 const MyProfile = () => {
-  const [activeSection, setActiveSection] = useState('myFoods');
+  const [activeSection, setActiveSection] = useState('overview');
   const [foodPartner, setFoodPartner] = useState(null);
   const [food, setFood] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,240 +38,324 @@ const MyProfile = () => {
   }, []);
 
   const initials = useMemo(() => {
-    const name = foodPartner?.businessName || '';
-    if (!name.trim()) return 'F';
+    const name = foodPartner?.businessName || foodPartner?.ownerName || '';
+    if (!name.trim()) return 'FP';
+
     const parts = name.trim().split(' ');
-    if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
-    return name.slice(0, 1).toUpperCase();
+    if (parts.length >= 2) return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+    return name.slice(0, 2).toUpperCase();
   }, [foodPartner]);
+
+  const dashboard = useMemo(() => {
+    const totalFoods = food.length;
+    const totalLikes = food.reduce((sum, item) => sum + (item.likeCount || 0), 0);
+    const totalComments = food.reduce((sum, item) => sum + (item.commentCount || 0), 0);
+    const pricedFoods = food.filter((item) => Number(item.price) > 0);
+    const averagePrice = pricedFoods.length
+      ? Math.round(
+          pricedFoods.reduce((sum, item) => sum + Number(item.price), 0) /
+            pricedFoods.length
+        )
+      : 0;
+    const profileScore =
+      45 +
+      Math.min(totalFoods * 8, 30) +
+      (foodPartner?.address ? 10 : 0) +
+      (getPhone(foodPartner) !== 'Not added' ? 10 : 0) +
+      (foodPartner?.email ? 5 : 0);
+
+    return {
+      averagePrice,
+      profileScore: Math.min(profileScore, 100),
+      totalComments,
+      totalFoods,
+      totalLikes,
+      totalReach: totalFoods * 137 + totalLikes * 5 + totalComments * 9,
+    };
+  }, [food, foodPartner]);
+
+  const featuredFood = useMemo(() => {
+    if (!food.length) return null;
+    return [...food].sort(
+      (a, b) =>
+        (b.likeCount || 0) +
+        (b.commentCount || 0) -
+        ((a.likeCount || 0) + (a.commentCount || 0))
+    )[0];
+  }, [food]);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0b0f1a] text-white flex items-center justify-center">
-        Loading...
-      </div>
+      <main className="partner-dashboard partner-dashboard--center">
+        <div className="dashboard-loader" />
+        <p>Preparing your dashboard...</p>
+      </main>
     );
   }
 
   if (!foodPartner) {
     return (
-      <div className="min-h-screen bg-[#0b0f1a] text-white flex items-center justify-center">
-        No Profile Found
-      </div>
+      <main className="partner-dashboard partner-dashboard--center">
+        <div className="empty-orb">FP</div>
+        <h1>No Profile Found</h1>
+        <p>Please login again to open your food partner dashboard.</p>
+        <Link to="/food-partner/login" className="primary-action">
+          Partner login
+        </Link>
+      </main>
     );
   }
 
   return (
-      <div className="min-h-screen bg-[#070a12] text-white">
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(255,209,102,0.20),transparent_35%),radial-gradient(circle_at_80%_20%,rgba(252,211,77,0.15),transparent_35%),radial-gradient(circle_at_50%_90%,rgba(45,212,191,0.12),transparent_45%)]" />
-
-        <div className="relative mx-auto max-w-[980px] px-4 pt-6 pb-6">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-orange-400 via-amber-300 to-emerald-300 p-[2px] shadow-zomato">
-                <div className="h-full w-full rounded-[14px] bg-[#0b0f1a] flex items-center justify-center">
-                  <span className="text-lg font-extrabold">{initials}</span>
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-2xl font-extrabold tracking-tight">
-                    {foodPartner.businessName}
-                  </h1>
-                  <span className="inline-flex items-center rounded-full bg-white/10 px-2 py-0.5 text-xs font-semibold text-amber-200 border border-amber-200/30">
-                    Partner
-                  </span>
-                </div>
-                <p className="mt-1 text-sm text-white/70">
-                  @{foodPartner.ownerName} • {foodPartner.address}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-col items-end gap-2">
-              <button
-                className={
-                  activeSection === 'profile'
-                    ? 'rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold border border-white/20'
-                    : 'rounded-xl bg-white/5 px-3 py-2 text-sm font-semibold border border-white/10 hover:bg-white/10 transition'
-                }
-                onClick={() => setActiveSection('profile')}
-              >
-                Profile
-              </button>
-
-              <button
-                className={
-                  activeSection === 'myFoods'
-                    ? 'rounded-xl bg-gradient-to-r from-amber-300 to-orange-400 px-3 py-2 text-sm font-extrabold text-black hover:opacity-90 transition'
-                    : 'rounded-xl bg-white/5 px-3 py-2 text-sm font-extrabold text-amber-200 border border-white/10 hover:bg-white/10 transition'
-                }
-                onClick={() => setActiveSection('myFoods')}
-              >
-                My Foods
-              </button>
-            </div>
+    <main className="partner-dashboard">
+      <section className="dashboard-hero">
+        <div className="dashboard-topbar">
+          <div className="partner-avatar" aria-hidden="true">
+            {initials}
           </div>
 
-          <div className="mt-5 grid grid-cols-3 gap-3">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div className="text-2xl font-extrabold">{food.length}</div>
-              <div className="mt-1 text-xs text-white/60">Videos</div>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div className="text-2xl font-extrabold">{food.length * 17}</div>
-              <div className="mt-1 text-xs text-white/60">Views</div>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div className="text-2xl font-extrabold">{food.length * 3 + 24}</div>
-              <div className="mt-1 text-xs text-white/60">Orders</div>
-            </div>
-          </div>
-
-          <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-            <div className="text-sm text-white/70">
-              Owner:{' '}
-              <span className="font-semibold text-white">{foodPartner.ownerName}</span>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <Link
-                to="/create-food"
-                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-amber-300 to-orange-400 px-4 py-2 text-sm font-extrabold text-black hover:opacity-90 transition"
-              >
-                + Add Food
-              </Link>
-              <button
-                onClick={() => setActiveSection('myFoods')}
-                className="inline-flex items-center justify-center rounded-xl bg-white/5 border border-white/10 px-4 py-2 text-sm font-extrabold text-amber-200 hover:bg-white/10 transition"
-              >
-                Reels
-              </button>
+          <div className="partner-heading">
+            <span className="eyebrow">Partner dashboard</span>
+            <h1>{foodPartner.businessName || 'Food Partner'}</h1>
+            <p>{foodPartner.address || 'Add your address so customers can find you faster.'}</p>
+            <div className="billboard-details" aria-label="Partner details">
+              <span>{foodPartner.ownerName || 'Owner not added'}</span>
+              <span>{getPhone(foodPartner)}</span>
+              <span>{foodPartner.email || 'Email not added'}</span>
             </div>
           </div>
         </div>
-      </div>
 
+        <div className="hero-actions">
+          <Link to="/create-food" className="primary-action">
+            Add food
+          </Link>
+          <button
+            type="button"
+            className="soft-action"
+            onClick={() => setActiveSection('foods')}
+          >
+            View menu
+          </button>
+        </div>
 
-      <div className="mx-auto max-w-[980px] px-4 pb-24">
-        {activeSection === 'profile' ? (
-          <section className="mt-6 rounded-3xl border border-white/10 bg-white/5 p-5">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <h2 className="text-lg font-extrabold">Partner details</h2>
-                <p className="mt-2 text-sm text-white/70">
-                  Phone: <span className="font-semibold text-white">{foodPartner.Phone}</span>
-                </p>
-                <p className="mt-1 text-sm text-white/70">
-                  Email: <span className="font-semibold text-white">{foodPartner.email}</span>
-                </p>
-                <p className="mt-1 text-sm text-white/70">
-                  Address:{' '}
-                  <span className="font-semibold text-white">{foodPartner.address}</span>
+        <div className="dashboard-stats" aria-label="Partner performance">
+          <article className="stat-tile stat-tile--sunset">
+            <span>Foods</span>
+            <strong>{dashboard.totalFoods}</strong>
+            <small>live posts</small>
+          </article>
+
+          <article className="stat-tile stat-tile--mint">
+            <span>Reach</span>
+            <strong>{dashboard.totalReach.toLocaleString()}</strong>
+            <small>estimated views</small>
+          </article>
+
+          <article className="stat-tile stat-tile--berry">
+            <span>Buzz</span>
+            <strong>{dashboard.totalLikes + dashboard.totalComments}</strong>
+            <small>likes + comments</small>
+          </article>
+        </div>
+      </section>
+
+      <section className="dashboard-shell">
+        <nav className="dashboard-tabs" aria-label="Dashboard sections">
+          {['overview', 'foods', 'profile'].map((section) => (
+            <button
+              key={section}
+              type="button"
+              className={activeSection === section ? 'active' : ''}
+              onClick={() => setActiveSection(section)}
+            >
+              {section}
+            </button>
+          ))}
+        </nav>
+
+        {activeSection === 'overview' && (
+          <div className="dashboard-grid">
+            <article className="panel profile-score-panel">
+              <div>
+                <span className="panel-label">Profile strength</span>
+                <h2>{dashboard.profileScore}% ready</h2>
+                <p>
+                  Keep foods, address, phone, and email updated so your shop
+                  looks active after every login.
                 </p>
               </div>
+              <div className="score-ring" style={{ '--score': `${dashboard.profileScore}%` }}>
+                <span>{dashboard.profileScore}</span>
+              </div>
+            </article>
 
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <h2 className="text-lg font-extrabold">Quick tips</h2>
-                <div className="mt-3 grid grid-cols-2 gap-3">
-                  <div className="rounded-xl bg-white/5 border border-white/10 p-3">
-                    <div className="text-xs text-white/60">Tip</div>
-                    <div className="mt-1 text-sm font-semibold">Short reels</div>
+            <article className="panel spotlight-panel">
+              <span className="panel-label">Today's spotlight</span>
+              {featuredFood ? (
+                <div className="spotlight-food">
+                  <div className="spotlight-media">
+                    {featuredFood.video ? (
+                      <video src={featuredFood.video} muted loop autoPlay playsInline />
+                    ) : featuredFood.imageUrl ? (
+                      <img src={featuredFood.imageUrl} alt={featuredFood.name || 'Food'} />
+                    ) : (
+                      <span>{featuredFood.name?.slice(0, 1) || 'F'}</span>
+                    )}
                   </div>
-                  <div className="rounded-xl bg-white/5 border border-white/10 p-3">
-                    <div className="text-xs text-white/60">Tip</div>
-                    <div className="mt-1 text-sm font-semibold">Price overlay</div>
-                  </div>
-                  <div className="rounded-xl bg-white/5 border border-white/10 p-3">
-                    <div className="text-xs text-white/60">Tip</div>
-                    <div className="mt-1 text-sm font-semibold">Clear menu</div>
-                  </div>
-                  <div className="rounded-xl bg-white/5 border border-white/10 p-3">
-                    <div className="text-xs text-white/60">Tip</div>
-                    <div className="mt-1 text-sm font-semibold">Auto-play</div>
+                  <div>
+                    <h2>{featuredFood.name || 'Featured food'}</h2>
+                    <p>{featuredFood.description || 'Fresh item from your menu.'}</p>
+                    <strong>{formatPrice(featuredFood.price)}</strong>
                   </div>
                 </div>
+              ) : (
+                <div className="mini-empty">
+                  <h2>No food posted yet</h2>
+                  <p>Add your first reel to unlock menu insights.</p>
+                </div>
+              )}
+            </article>
+
+            <article className="panel quick-panel">
+              <span className="panel-label">Quick actions</span>
+              <div className="quick-actions">
+                <Link to="/create-food">Create a reel</Link>
+                <button type="button" onClick={() => setActiveSection('profile')}>
+                  Check details
+                </button>
+                <button type="button" onClick={() => setActiveSection('foods')}>
+                  Manage foods
+                </button>
               </div>
-            </div>
-          </section>
-        ) : (
-          <section className="mt-6">
-            <div className="mb-4 flex items-center justify-between gap-3">
-              <h2 className="text-xl font-extrabold">My Foods</h2>
-              <div className="text-sm text-white/60">Showing {Math.min(food.length, 9)} videos</div>
+            </article>
+
+            <article className="panel tips-panel">
+              <span className="panel-label">Next best moves</span>
+              <ul>
+                <li>Add prices to every food item.</li>
+                <li>Use short videos with bright lighting.</li>
+                <li>Keep the dish name clear and searchable.</li>
+              </ul>
+            </article>
+          </div>
+        )}
+
+        {activeSection === 'foods' && (
+          <section className="foods-section">
+            <div className="section-heading">
+              <div>
+                <span className="panel-label">Your menu reels</span>
+                <h2>{food.length ? `${food.length} food posts` : 'Start your menu'}</h2>
+              </div>
+              <Link to="/create-food" className="compact-action">
+                New
+              </Link>
             </div>
 
             {food.length > 0 ? (
-              <div className="grid grid-cols-3 gap-2">
-                {food.slice(0, 9).map((item) => (
-                  <div
+              <div className="food-card-grid">
+                {food.map((item, index) => (
+                  <article
                     key={item._id}
-                    className="reel-card group relative aspect-square overflow-hidden rounded-2xl bg-black/20 border border-transparent"
-                    
+                    className="food-card"
+                    style={{ '--card-delay': `${Math.min(index, 9) * 45}ms` }}
                   >
-                    {item.video ? (
-                      <video
-                        src={item.video}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        preload="metadata"
-                        className="h-full w-full object-cover opacity-95 group-hover:scale-[1.02] transition-transform"
-                      />
-                    ) : (
-                      <div className="h-full w-full flex items-center justify-center bg-black/20">
-                        <span className="text-sm font-semibold text-white/60">No video</span>
+                    <div className="food-media">
+                      {item.video ? (
+                        <video
+                          src={item.video}
+                          muted
+                          loop
+                          playsInline
+                          preload="metadata"
+                        />
+                      ) : item.imageUrl ? (
+                        <img src={item.imageUrl} alt={item.name || 'Food'} />
+                      ) : (
+                        <div className="food-fallback">{item.name?.slice(0, 1) || 'F'}</div>
+                      )}
+                    </div>
+                    <div className="food-card-body">
+                      <div>
+                        <h3>{item.name || 'Untitled food'}</h3>
+                        <p>{item.description || 'No description added yet.'}</p>
                       </div>
-                    )}
-
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent p-3">
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="min-w-0">
-                          <div className="text-xs font-extrabold text-amber-200 truncate">
-                            {item.name || 'Food'}
-                          </div>
-                          <div className="text-[11px] text-white/70 line-clamp-1">
-                            {item.description || 'Fresh & tasty'}
-                          </div>
-                        </div>
-                        {item.price ? (
-                          <div className="shrink-0 rounded-full bg-amber-400/90 px-2 py-1 text-[11px] font-extrabold text-black">
-                            ₹{item.price}
-                          </div>
-                        ) : null}
+                      <div className="food-card-footer">
+                        <span>{formatPrice(item.price)}</span>
+                        <small>
+                          {(item.likeCount || 0) + (item.commentCount || 0)} reactions
+                        </small>
                       </div>
                     </div>
-                  </div>
+                  </article>
                 ))}
               </div>
             ) : (
-              <div className="rounded-3xl border border-dashed border-white/15 bg-white/5 p-10 text-center">
-                <div className="text-4xl">🍽️</div>
-                <div className="mt-3 text-lg font-extrabold">No videos yet</div>
-                <div className="mt-1 text-sm text-white/70">
-                  Add your first food video to look amazing on FoodPartner.
-                </div>
-                <div className="mt-4">
-                  <Link
-                    to="/create-food"
-                    className="inline-flex items-center justify-center rounded-xl bg-amber-400 px-5 py-2 text-sm font-extrabold text-black hover:opacity-90 transition"
-                  >
-                    Create food
-                  </Link>
-                </div>
+              <div className="empty-panel">
+                <div className="empty-orb">+</div>
+                <h2>Your dashboard is waiting for its first dish</h2>
+                <p>Add a food video and it will appear here as a colorful menu card.</p>
+                <Link to="/create-food" className="primary-action">
+                  Add first food
+                </Link>
               </div>
             )}
           </section>
         )}
 
-        <BottomNav />
-      </div>
-    </div>
+        {activeSection === 'profile' && (
+          <section className="profile-details">
+            <article className="panel detail-panel">
+              <span className="panel-label">Business info</span>
+              <dl>
+                <div>
+                  <dt>Owner</dt>
+                  <dd>{foodPartner.ownerName || 'Not added'}</dd>
+                </div>
+                <div>
+                  <dt>Email</dt>
+                  <dd>{foodPartner.email || 'Not added'}</dd>
+                </div>
+                <div>
+                  <dt>Phone</dt>
+                  <dd>{getPhone(foodPartner)}</dd>
+                </div>
+                <div>
+                  <dt>Address</dt>
+                  <dd>{foodPartner.address || 'Not added'}</dd>
+                </div>
+              </dl>
+            </article>
+
+            <article className="panel detail-panel">
+              <span className="panel-label">Menu health</span>
+              <dl>
+                <div>
+                  <dt>Total foods</dt>
+                  <dd>{dashboard.totalFoods}</dd>
+                </div>
+                <div>
+                  <dt>Average price</dt>
+                  <dd>{dashboard.averagePrice ? `Rs ${dashboard.averagePrice}` : 'Add prices'}</dd>
+                </div>
+                <div>
+                  <dt>Total likes</dt>
+                  <dd>{dashboard.totalLikes}</dd>
+                </div>
+                <div>
+                  <dt>Total comments</dt>
+                  <dd>{dashboard.totalComments}</dd>
+                </div>
+              </dl>
+            </article>
+          </section>
+        )}
+      </section>
+
+      <BottomNav />
+    </main>
   );
 };
 
 export default MyProfile;
-
