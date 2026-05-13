@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import BottomNav from '../../components/BottomNav';
 import './MyProfile.css';
+import { API_BASE_URL } from '../../config/api';
 
 const formatPrice = (price) => {
   const amount = typeof price === 'string' ? Number(price) : price;
@@ -21,7 +22,7 @@ const MyProfile = () => {
     const fetchFoodPartnerProfile = async () => {
       try {
         const response = await axios.get(
-          'http://localhost:3000/api/food-partner/profile',
+          `${API_BASE_URL}/api/food-partner/profile`,
           { withCredentials: true }
         );
 

@@ -12,10 +12,64 @@ Changes made to fix: "profile not visible after adding food"
 2) frontend/src/routes/AppRoutes.jsx
 - Removed stray trailing character 'h' after the /user/login route definition.
 
+
 3) backend/src/app.js
 - Adjusted CORS origin to avoid credential/cookie issues that were causing auth failures.
 - Changed:
   origin: 'http://localhost:5173'
   to:
   origin: true
+
+4) frontend/src/config/api.js
+- Added one central frontend API base URL:
+  https://food-based-reels-platform-1.onrender.com
+- All frontend API calls now build URLs from API_BASE_URL instead of hardcoded:
+  http://localhost:3000
+
+5) Frontend files updated to use API_BASE_URL
+- frontend/src/hooks/useComments.js
+- frontend/src/hooks/useBookmarks.js
+- frontend/src/pages/UserRegister.jsx
+- frontend/src/pages/UserLogin.jsx
+- frontend/src/pages/FoodPartnerLogin.jsx
+- frontend/src/pages/FoodPartnerRegister.jsx
+- frontend/src/pages/general/Home.jsx
+- frontend/src/pages/general/Saved.jsx
+- frontend/src/pages/User/UserProfile.jsx
+- frontend/src/pages/User/Logout.jsx
+- frontend/src/pages/food-partner/Profile.jsx
+- frontend/src/pages/food-partner/CreateFood.jsx
+- frontend/src/pages/food-partner/MyProfile.jsx
+
+6) backend/src/app.js
+- Replaced loose CORS config with explicit allowed origins:
+  http://localhost:5173
+  http://127.0.0.1:5173
+  process.env.FRONTEND_URL
+- Kept credentials enabled so axios requests with withCredentials: true can work.
+- Added allowed headers and OPTIONS method support for browser preflight requests.
+
+7) backend/src/controller/auth.controller.js
+- Added shared cookie options for login/register/logout cookies.
+- In production, cookies are set with sameSite: 'none' and secure: true so browser sessions can work between the frontend and Render backend.
+
+8) backend/.env
+- Added:
+  NODE_ENV=production
+  FRONTEND_URL=http://localhost:5173
+- These values should also be added in the Render backend environment variables before redeploying.
+
+9) frontend/src/config/api.js
+- API_BASE_URL now reads VITE_API_BASE_URL first and falls back to:
+  https://food-based-reels-platform-1.onrender.com
+- This makes Vercel deployment easier because the backend URL can be changed from Vercel environment variables.
+
+10) frontend/vercel.json
+- Added rewrite from all routes to /index.html so React Router pages work after refresh on Vercel.
+
+11) frontend/.env.example and backend/.env.example
+- Added example deployment environment variables for Vercel and Render.
+
+12) backend/src/app.js
+- Added FRONTEND_URLS support for comma-separated extra frontend origins.
 

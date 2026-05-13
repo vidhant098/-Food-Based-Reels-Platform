@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config/api';
 
 export const useBookmarks = () => {
   const [savedIds, setSavedIds] = useState(new Set());
@@ -8,7 +9,7 @@ export const useBookmarks = () => {
 
   const handleSave = useCallback(async (foodId) => {
     try {
-      await axios.post('http://localhost:3000/api/food/save', { foodId }, { withCredentials: true });
+      await axios.post(`${API_BASE_URL}/api/food/save`, { foodId }, { withCredentials: true });
       setSavedIds((prev) => {
         const next = new Set(prev);
         if (next.has(foodId)) next.delete(foodId);

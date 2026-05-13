@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './CreateFood.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../../config/api';
 
 const CreateFood = () => {
 
@@ -52,7 +53,7 @@ const CreateFood = () => {
       setLoading(true);
 
       const response = await axios.post(
-        'http://localhost:3000/api/food',
+        `${API_BASE_URL}/api/food`,
         formData,
         { withCredentials: true }
       );

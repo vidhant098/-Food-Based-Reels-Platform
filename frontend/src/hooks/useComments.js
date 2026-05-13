@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config/api';
 
 export const useComments = (setFoods) => {
   const [commentModalOpen, setCommentModalOpen] = useState(false);
@@ -13,7 +14,7 @@ export const useComments = (setFoods) => {
     setCommentModalOpen(true);
     setCommentLoading(true);
     try {
-      const res = await axios.get(`http://localhost:3000/api/food/comment/${foodId}`, {
+      const res = await axios.get(`${API_BASE_URL}/api/food/comment/${foodId}`, {
         withCredentials: true,
       });
       setComments(res.data.comments || []);
@@ -36,7 +37,7 @@ export const useComments = (setFoods) => {
     setCommentLoading(true);
     try {
       const res = await axios.post( 
-        'http://localhost:3000/api/food/comment',
+        `${API_BASE_URL}/api/food/comment`,
         { foodId: activeFoodId, text: commentText.trim() },
         { withCredentials: true }
       );

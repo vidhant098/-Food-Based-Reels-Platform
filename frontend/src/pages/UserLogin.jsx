@@ -2,6 +2,7 @@ import React from 'react';
 import '../styles/auth.css';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom'; 
+import { API_BASE_URL } from '../config/api';
 
  import { useState } from 'react';
 
@@ -27,7 +28,7 @@ setLoading(true) ;
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/auth/user/login",
+        `${API_BASE_URL}/api/auth/user/login`,
         {
           email,
           password

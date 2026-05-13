@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Saved.css';
 import BottomNav from '../../components/BottomNav';
+import { API_BASE_URL } from '../../config/api';
 
 const Saved = () => {
   const [savedItems, setSavedItems] = useState([]);
@@ -10,7 +11,7 @@ const Saved = () => {
   useEffect(() => {
     const fetchSaved = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/food/saved', { withCredentials: true });
+        const res = await axios.get(`${API_BASE_URL}/api/food/saved`, { withCredentials: true });
         setSavedItems(res.data.savedFoods || []);
       } catch (err) {
         console.error('Failed to fetch saved items', err);

@@ -6,6 +6,12 @@ const jwt = require('jsonwebtoken')
 
 const bcrypt = require('bcrypt');
 
+const cookieOptions = {
+  httpOnly: true,
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  secure: process.env.NODE_ENV === 'production',
+};
+
  async function registerUser(req , res )
  {
      const {fullName , email   , password} = req.body ; 
@@ -30,7 +36,7 @@ const bcrypt = require('bcrypt');
         {  id:user._id, },
     process.env.JWT_SECRET )
     
-    res.cookie("token" , token ) 
+    res.cookie("token" , token, cookieOptions ) 
 
     res.status(201).send({message:"user registered successfully" , user:{
         _id:user._id ,
@@ -66,7 +72,7 @@ const bcrypt = require('bcrypt');
         process.env.JWT_SECRET ) 
 
 
-        res.cookie("token" , token ) 
+        res.cookie("token" , token, cookieOptions ) 
 
 
          res.status(200).json({message:' login successfully' , 
@@ -81,7 +87,7 @@ const bcrypt = require('bcrypt');
 
    function logoutUser(req , res )
    {
-     res.clearCookie("token")
+     res.clearCookie("token", cookieOptions)
      res.status(200).json({message:'logout successfully'})
    } 
     
@@ -114,7 +120,7 @@ const bcrypt = require('bcrypt');
          } , process.env.JWT_SECRET )       
            
 
-           res.cookie("token" , token ) ; 
+           res.cookie("token" , token, cookieOptions ) ; 
 
             res.status(200).json({
                 message:"food partnet regitered successfully "  ,  
@@ -152,7 +158,7 @@ const bcrypt = require('bcrypt');
             id:foodPartner._id
              } , process.env.JWT_SECRET )   
              
-             res.cookie("token" , token ) ; 
+             res.cookie("token" , token, cookieOptions ) ; 
 
              res.status(200).json({
                 message:"food partner login successfully"  ,  
@@ -168,7 +174,7 @@ const bcrypt = require('bcrypt');
     //  food partner logout
      async function logoutFoodPartner(req , res )
      {
-      res.clearCookie("token")
+      res.clearCookie("token", cookieOptions)
       res.status(200).json({message:"food partner logout successfully "}) 
      }
 

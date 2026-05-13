@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import BottomNav from '../../components/BottomNav';
 import './UserProfile.css';
+import { API_BASE_URL } from '../../config/api';
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
@@ -28,7 +29,7 @@ const UserProfile = () => {
     const fetchUserData = async () => {
       try {
         // Fetch user profile
-        const userRes = await axios.get('http://localhost:3000/api/auth/me', {
+        const userRes = await axios.get(`${API_BASE_URL}/api/auth/me`, {
           withCredentials: true
         });
         setUser(userRes.data.user);
@@ -36,10 +37,10 @@ const UserProfile = () => {
         // Fetch liked and saved videos
         try {
           const [likedRes, savedRes] = await Promise.all([
-            axios.get('http://localhost:3000/api/food/liked', {
+            axios.get(`${API_BASE_URL}/api/food/liked`, {
               withCredentials: true
             }),
-            axios.get('http://localhost:3000/api/food/saved', {
+            axios.get(`${API_BASE_URL}/api/food/saved`, {
               withCredentials: true
             })
           ]);
@@ -77,7 +78,7 @@ const UserProfile = () => {
     setLoggingOut(true);
     setLogoutError('');
     try {
-      await axios.post('http://localhost:3000/api/auth/user/logout', {}, {
+      await axios.post(`${API_BASE_URL}/api/auth/user/logout`, {}, {
         withCredentials: true
       });
       localStorage.removeItem('userToken');

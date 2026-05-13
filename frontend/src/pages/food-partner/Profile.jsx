@@ -3,6 +3,7 @@ import './Profile.css';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import BottomNav from '../../components/BottomNav';
+import { API_BASE_URL } from '../../config/api';
 
 const Profile = () => {
   const { id } = useParams();
@@ -14,7 +15,7 @@ const Profile = () => {
     const fetchProfile = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/food-partner/${id}`,
+          `${API_BASE_URL}/api/food-partner/${id}`,
           { withCredentials: true }
         );
         setProfile(res.data.foodPartner);

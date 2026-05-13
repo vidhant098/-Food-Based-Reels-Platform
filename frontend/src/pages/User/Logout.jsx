@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Logout.css';
+import { API_BASE_URL } from '../../config/api';
 
 const Logout = () => {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ const Logout = () => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        'http://localhost:3000/api/auth/user/logout',
+        `${API_BASE_URL}/api/auth/user/logout`,
         {},
         { withCredentials: true }
       );

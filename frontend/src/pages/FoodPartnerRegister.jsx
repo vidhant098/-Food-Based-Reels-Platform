@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../styles/auth.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
+import { API_BASE_URL } from '../config/api';
 
 const FoodPartnerRegister = () => { 
 
@@ -32,7 +33,7 @@ const FoodPartnerRegister = () => {
 
     try{
       const response = await axios.post(   
-        "http://localhost:3000/api/auth/foodpartner/register",
+        `${API_BASE_URL}/api/auth/foodpartner/register`,
         {  
           ownerName,
           businessName,

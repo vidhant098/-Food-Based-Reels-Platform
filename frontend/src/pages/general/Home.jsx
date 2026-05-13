@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../../config/api';
 
 import './Home.css';
 
@@ -46,7 +47,7 @@ const Home = () => {
       try {
 
         const response = await axios.get(
-          'http://localhost:3000/api/food',
+          `${API_BASE_URL}/api/food`,
           {
             withCredentials: true,
           }
@@ -147,7 +148,7 @@ const Home = () => {
     try {
 
       await axios.post(
-        'http://localhost:3000/api/food/like',
+        `${API_BASE_URL}/api/food/like`,
         { foodId },
         { withCredentials: true }
       );
