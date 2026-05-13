@@ -278,14 +278,16 @@
   min-height: 220px;
 }
 
-.preview-video {
+.preview-video 
+{
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-.preview-placeholder {
+.preview-placeholder 
+{
   padding: 1rem;
   color: var(--create-food-muted);
   text-align: center;
@@ -293,13 +295,15 @@
   font-size: 0.88rem;
 }
 
-.preview-content h2 {
+.preview-content h2
+ {
   margin: 0 0 0.32rem;
   color: var(--create-food-text);
   font-size: 1.1rem;
 }
 
-.preview-price {
+.preview-price 
+{
   display: inline-flex;
   align-items: center;
   width: fit-content;
@@ -313,13 +317,15 @@
   font-weight: 800;
 }
 
-.preview-content p {
+.preview-content p
+ {
   color: var(--create-food-muted);
   line-height: 1.55;
   font-size: 0.88rem;
 }
 
-@media (max-width: 420px) {
+@media (max-width: 420px) 
+{
   .create-food-page {
     padding: 0.55rem;
   }
@@ -330,7 +336,8 @@
     padding: 0.75rem;
   }
 
-  .create-food-hero h1 {
+  .create-food-hero h1
+   {
     font-size: 1.45rem;
   }
 

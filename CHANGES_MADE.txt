@@ -22,7 +22,7 @@ Changes made to fix: "profile not visible after adding food"
 
 4) frontend/src/config/api.js
 - Added one central frontend API base URL:
-  https://food-based-reels-platform-1.onrender.com
+  https://food-based-reels-platform-2.onrender.com
 - All frontend API calls now build URLs from API_BASE_URL instead of hardcoded:
   http://localhost:3000
 
@@ -61,7 +61,13 @@ Changes made to fix: "profile not visible after adding food"
 
 9) frontend/src/config/api.js
 - API_BASE_URL now reads VITE_API_BASE_URL first and falls back to:
+  https://food-based-reels-platform-2.onrender.com
+
+13) frontend/src/config/api.js and frontend/.env.example
+- Updated backend Render URL from:
   https://food-based-reels-platform-1.onrender.com
+  to:
+  https://food-based-reels-platform-2.onrender.com
 - This makes Vercel deployment easier because the backend URL can be changed from Vercel environment variables.
 
 10) frontend/vercel.json
