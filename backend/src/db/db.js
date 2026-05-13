@@ -1,12 +1,17 @@
-    const mongoose = require('mongoose')
-   
-  function connectDB(){
+const mongoose = require('mongoose');
 
- 
-     mongoose.connect(process.env.MONGODB_URL).
-      then(()=>{
-      console.log("database connected");
-  })
-  } 
+async function connectDB() {
+  const mongoUrl = process.env.MONGODB_URL?.trim();
 
-   module.exports = connectDB ;
+  if (!mongoUrl) {
+    throw new Error('MONGODB_URL is missing');
+  }
+
+  await mongoose.connect(mongoUrl, {
+    serverSelectionTimeoutMS: 10000,
+  });
+
+  console.log('database connected');
+}
+
+module.exports = connectDB;

@@ -1,13 +1,19 @@
 //  start server hare
- require('dotenv').config() 
+require('dotenv').config();
 
- const app = require('./src/app') ;  
+const app = require('./src/app');
+const connectDB = require('./src/db/db');
 
-  const connectDB = require('./src/db/db')
+const PORT = process.env.PORT || 3000;
 
-  app.listen(process.env.PORT || 3000 , ()=>{
-    console.log("server is running  ")
+connectDB()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`server is running on port ${PORT}`);
+    });
   })
-
-  connectDB() ;
+  .catch((err) => {
+    console.error('database connection failed:', err.message);
+    process.exit(1);
+  });
 
