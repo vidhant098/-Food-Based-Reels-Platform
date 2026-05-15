@@ -141,12 +141,20 @@ const Home = () => {
   };
 
   // LIKE
+  const [pendingLikes, setPendingLikes] = useState(new Set());
+
   const handleLike = async (foodId) => {
+    if (pendingLikes.has(foodId)) return;
 
     const currentlyLiked = likedIds.has(foodId);
 
-    try {
+    setPendingLikes((prev) => {
+      const next = new Set(prev);
+      next.add(foodId);
+      return next;
+    });
 
+    try {
       await axios.post(
         `${API_BASE_URL}/api/food/like`,
         { foodId },
@@ -154,21 +162,10 @@ const Home = () => {
       );
 
       setLikedIds((prev) => {
-
         const next = new Set(prev);
-
-        if (next.has(foodId)) {
-
-          next.delete(foodId);
-
-        } else {
-
-          next.add(foodId);
-
-        }
-
+        if (next.has(foodId)) next.delete(foodId);
+        else next.add(foodId);
         return next;
-
       });
 
       setFoods((prev) =>
@@ -176,31 +173,30 @@ const Home = () => {
           f._id === foodId
             ? {
                 ...f,
-                likeCount:
-                  (f.likeCount || 0) +
-                  (currentlyLiked ? -1 : 1),
+                likeCount: Math.max(
+                  0,
+                  (f.likeCount || 0) + (currentlyLiked ? -1 : 1)
+                ),
               }
             : f
         )
       );
-
     } catch (err) {
-
       if (err.response?.status === 401) {
-
         alert('Please login first to like foods');
-
         navigate('/user/login');
-
         return;
-
       }
-
       console.error('Like error', err);
-
+    } finally {
+      setPendingLikes((prev) => {
+        const next = new Set(prev);
+        next.delete(foodId);
+        return next;
+      });
     }
-
   };
+
 
   // VISIT PROFILE
   const visitProfile = (partnerId) => {

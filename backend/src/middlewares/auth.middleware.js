@@ -54,32 +54,34 @@ async function authFoodPartnerMiddleware(req, res, next) {
 } 
 
  
- const authUserMiddleware = async (req, res, next) => {
-  
-     const token = req.cookies.token;
+const authUserMiddleware = async (req, res, next) => {
+  try {
+    // Accept token from cookie OR Authorization header
+    const tokenFromCookie = req.cookies?.token;
+    const authHeader = req.headers?.authorization;
 
-     if (!token) {
-         return res.status(401).json({ message: "Unauthorized, please login first" });
-     }
+    let token = tokenFromCookie;
+    if (!token && authHeader && authHeader.startsWith('Bearer')) {
+      token = authHeader.split(' ')[1];
+    }
 
-      try{
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized, please login first" });
+    }
 
-        const decoded = jwt.verify(token , process.env.JWT_SECRET) 
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+    const user = await userModel.findById(decoded.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-         const user = await userModel.findById(decoded.id);
+    req.user = user;
+    next();
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid token", error: err.message });
+  }
+};
 
-
-         req.user = user;
-
-         next();
-      } 
-
-       catch(err)
-       {
-        res.status(401).json({ message: "Invalid token"  , error: err.message });
-
-       }
- }
 
 module.exports = { authFoodPartnerMiddleware, authUserMiddleware };

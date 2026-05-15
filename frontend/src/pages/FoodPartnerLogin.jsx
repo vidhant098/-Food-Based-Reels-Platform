@@ -28,20 +28,17 @@ const FoodPartnerLogin = () => {
       );
 
       console.log("Login Success:", response.data);
-       alert("login successfull")
       navigate("/foodPartnerOwn/profile");
 
-    } catch (err) 
-    {
-      const message = err.response?.data?.message || "Login failed"; 
 
-       console.log(err )
-      setError(message); 
-       alert('login failed')
+    } catch (err) {
+      const message = err.response?.data?.message || "Login failed";
+      console.log(err);
+      setError(message);
+    } finally {
+      setLoading(false);
     }
-     finally {
-      setLoading(false);   
-    }
+
   };
 
   return (

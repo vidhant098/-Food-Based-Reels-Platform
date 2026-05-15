@@ -82,7 +82,7 @@
   left: 50%;
   transform: translateX(-50%);
   width: var(--reel-width);
-  max-width: 500px;
+  max-width: 580px;
   padding: 0 12px 0 12px;
   display: flex;
   justify-content: space-between;

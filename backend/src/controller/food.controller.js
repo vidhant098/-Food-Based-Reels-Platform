@@ -79,14 +79,29 @@ async function likeFood(req, res) {
         food: foodId
       });
 
-      await foodModel.findByIdAndUpdate(foodId, {
-        $inc: { likeCount: -1 }
-      });
+      // prevent likeCount from going negative
+      await foodModel.findByIdAndUpdate(
+        foodId,
+        [
+          {
+            $set: {
+              likeCount: {
+                $max: [
+                  0,
+                  { $subtract: ['$likeCount', 1] }
+                ]
+              }
+            }
+          }
+        ],
+        { new: true }
+      );
 
       return res.status(200).json({
         message: "Food unliked successfully"
       });
     }
+
 
     const like = await LikeModel.create({
       user: user._id,

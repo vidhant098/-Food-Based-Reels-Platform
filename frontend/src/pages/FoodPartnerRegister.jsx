@@ -49,15 +49,13 @@ const FoodPartnerRegister = () => {
 
       navigate('/foodPartnerOwn/profile');  
 
-    } 
-    catch(err){ 
+    } catch (err) {
       console.log(err);
-      alert(err)
-      setError(err.response?.data?.message || "Registration failed"); 
+      setError(err.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
     }
-    finally {
-      setLoading(false);   
-    }
+
   };
 
   return (
