@@ -9,7 +9,8 @@ A full-stack food discovery platform with short reel-style videos. Users can wat
 - User registration and login with cookie-based authentication.
 - Reels-style home feed with vertical scroll snap.
 - Lazy video loading for better mobile performance.
-- Like and unlike food videos.
+- Like and unlike food videos (likeCount updates per user toggle).
+
 - Comment modal for each food video.
 - Save and unsave food videos.
 - User profile dashboard with:
