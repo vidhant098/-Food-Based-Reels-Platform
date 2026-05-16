@@ -21,6 +21,7 @@ const Home = () => {
   const [isDark, setIsDark] = useState(false);
 
   const [likedIds, setLikedIds] = useState(new Set());
+  const [pendingLikes, setPendingLikes] = useState(new Set());
 
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -53,7 +54,24 @@ const Home = () => {
           }
         );
 
-        setFoods(response.data.foodItems || []);
+        const foodItems = response.data.foodItems || [];
+
+        setFoods(foodItems);
+
+        // Set already liked foods
+        const liked = new Set();
+
+        foodItems.forEach((food) => {
+
+          if (food.isLiked) {
+
+            liked.add(food._id);
+
+          }
+
+        });
+
+        setLikedIds(liked);
 
       } catch (err) {
 
@@ -140,63 +158,125 @@ const Home = () => {
 
   };
 
-  // LIKE
-  const [pendingLikes, setPendingLikes] = useState(new Set());
-
+  // LIKE FUNCTION
   const handleLike = async (foodId) => {
+
+    // Prevent spam clicking
     if (pendingLikes.has(foodId)) return;
 
-    const currentlyLiked = likedIds.has(foodId);
-
     setPendingLikes((prev) => {
+
       const next = new Set(prev);
+
       next.add(foodId);
+
       return next;
+
     });
 
+    // Check current state
+    const alreadyLiked = likedIds.has(foodId);
+
+    // Instant UI update
+    setLikedIds((prev) => {
+
+      const next = new Set(prev);
+
+      if (alreadyLiked) {
+
+        next.delete(foodId);
+
+      } else {
+
+        next.add(foodId);
+
+      }
+
+      return next;
+
+    });
+
+    // Update like count instantly
+    setFoods((prev) =>
+      prev.map((food) =>
+        food._id === foodId
+          ? {
+              ...food,
+              likeCount: alreadyLiked
+                ? Math.max(0, (food.likeCount || 0) - 1)
+                : (food.likeCount || 0) + 1,
+            }
+          : food
+      )
+    );
+
     try {
+
       await axios.post(
         `${API_BASE_URL}/api/food/like`,
         { foodId },
         { withCredentials: true }
       );
 
+    } catch (err) {
+
+      console.error('Like error:', err);
+
+      // Rollback if request fails
       setLikedIds((prev) => {
+
         const next = new Set(prev);
-        if (next.has(foodId)) next.delete(foodId);
-        else next.add(foodId);
+
+        if (alreadyLiked) {
+
+          next.add(foodId);
+
+        } else {
+
+          next.delete(foodId);
+
+        }
+
         return next;
+
       });
 
       setFoods((prev) =>
-        prev.map((f) =>
-          f._id === foodId
+        prev.map((food) =>
+          food._id === foodId
             ? {
-                ...f,
-                likeCount: Math.max(
-                  0,
-                  (f.likeCount || 0) + (currentlyLiked ? -1 : 1)
-                ),
+                ...food,
+                likeCount: alreadyLiked
+                  ? (food.likeCount || 0) + 1
+                  : Math.max(0, (food.likeCount || 0) - 1),
               }
-            : f
+            : food
         )
       );
-    } catch (err) {
-      if (err.response?.status === 401) {
-        alert('Please login first to like foods');
-        navigate('/user/login');
-        return;
-      }
-      console.error('Like error', err);
-    } finally {
-      setPendingLikes((prev) => {
-        const next = new Set(prev);
-        next.delete(foodId);
-        return next;
-      });
-    }
-  };
 
+      if (err.response?.status === 401) {
+
+        alert('Please login first');
+
+        navigate('/user/login');
+
+      }
+
+    } finally {
+
+      setPendingLikes((prev) => {
+
+        const next = new Set(prev);
+
+        next.delete(foodId);
+
+        return next;
+
+      });
+
+    }
+
+  };
 
   // VISIT PROFILE
   const visitProfile = (partnerId) => {
@@ -255,6 +335,7 @@ const Home = () => {
             <div className="reel-info">
 
               <div className="food-meta-row">
+
                 <h3 className="food-name">
                   {food.name}
                 </h3>
@@ -264,6 +345,7 @@ const Home = () => {
                     Rs {food.price}
                   </span>
                 )}
+
               </div>
 
               <p className="food-desc">

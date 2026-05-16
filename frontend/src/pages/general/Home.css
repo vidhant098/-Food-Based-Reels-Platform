@@ -1,12 +1,13 @@
 .reel-container {
   height: 100svh;
-  width: 100vw;
+  width: 100%;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   scroll-behavior: auto;
   background: #000;
   padding-bottom: 60px;
 }
+
 
 @media (min-width: 768px) {
   .reel-container {
@@ -22,15 +23,19 @@
 
 /* Instagram-like center reel card (mobile-first) */
 :root {
-  --reel-width: min(calc(100vw - 16px), calc((100svh - 92px) * 9 / 16), 500px);
+  /* Instagram reels are basically ~9:16 full card within the viewport. */
+  --reel-width: min(calc(100vw - 16px), calc((100svh - 86px) * 9 / 16), 440px);
+
   --reel-height: calc(var(--reel-width) * 16 / 9);
 }
 
 @media (min-width: 768px) {
   :root {
-    --reel-width: min(500px, calc((100svh - 32px) * 9 / 16));
+    /* On desktop keep it wide but not too large */
+    --reel-width: min(420px, calc((100svh - 32px) * 9 / 16));
   }
 }
+
 
 .reel-item {
   min-height: 100svh;
@@ -104,12 +109,14 @@
   padding: 12px;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 16px;
-  background: linear-gradient(180deg, rgba(5, 8, 15, 0.18), rgba(5, 8, 15, 0.46));
+  /* More transparent like Instagram */
+  background: rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(6px);
   color: #fff;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
   pointer-events: auto;
 }
+
 
 .food-meta-row {
   display: flex;
@@ -121,6 +128,7 @@
 
 .food-name {
   min-width: 0;
+  text-align: left;
   font-size: 1.05rem;
   line-height: 1.12;
   font-weight: 900;
@@ -128,11 +136,15 @@
   overflow-wrap: anywhere;
 }
 
+
 .food-price {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
+  justify-content: flex-start;
+  text-align: left;
   width: fit-content;
+
   padding: 4px 8px;
   border-radius: 999px;
   background: linear-gradient(135deg, #ffcf5c, #ff6b6b 52%, #d946ef);
@@ -210,7 +222,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 3000;
   display: flex;
   align-items: flex-end;
@@ -348,6 +360,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+
   flex: 0 0 46px;
   gap: 12px;
   pointer-events: auto;
@@ -364,12 +377,15 @@
   cursor: pointer;
   font-size: 0.75rem;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-  transition: transform 0.2s ease;
+  /* smoother UI */
+  transition: transform 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
 }
 
+
 .action-btn:active {
-  transform: scale(0.9);
+  transform: scale(0.95);
 }
+
 
 .action-btn svg {
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
