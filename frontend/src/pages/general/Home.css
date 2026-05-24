@@ -1,18 +1,19 @@
 .reel-container {
   height: 100svh;
-  width: 100%;
+  width: 100vw;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   scroll-behavior: auto;
   background: #000;
-  padding-bottom: 60px;
+  padding-bottom: 0;
+  position: relative;
 }
 
 
 @media (min-width: 768px) {
   .reel-container {
-    width: calc(100vw - 72px);
-    margin-left: 72px;
+    width: 100vw;
+    margin-left: 0;
     padding-bottom: 0;
   }
 }
@@ -38,7 +39,7 @@
 
 
 .reel-item {
-  min-height: 100svh;
+  height: 100svh;
   width: 100%;
   scroll-snap-align: start;
   position: relative;
