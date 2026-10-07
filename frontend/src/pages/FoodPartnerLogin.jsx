@@ -79,7 +79,7 @@ const FoodPartnerLogin = () => {
               className="submit-btn"
               disabled={loading}
             >
-              {loading ? "Logging in..." : "Log in as Partner"}
+              {loading ? "Logging in..." : "Log in as a Partner"}
             </button>
 
           </form>

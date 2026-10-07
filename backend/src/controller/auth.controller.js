@@ -20,6 +20,11 @@ const cookieOptions = {
 const USER_TOKEN_COOKIE = 'userToken';
 const FOOD_PARTNER_TOKEN_COOKIE = 'foodPartnerToken';
 const normalizeEmail = (email) => email?.trim().toLowerCase();
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const findFoodPartnerByEmail = (email) =>
+  foodPartnerModel.findOne({
+    email: { $regex: `^${escapeRegex(email)}$`, $options: 'i' },
+  });
 
  async function registerUser(req , res )
  {
@@ -128,7 +133,7 @@ const normalizeEmail = (email) => email?.trim().toLowerCase();
           return res.status(400).json({ message: "all fields are required" });
         }
 
-         const isAccountAlreadyExist =  await foodPartnerModel.findOne({email:email})
+         const isAccountAlreadyExist =  await findFoodPartnerByEmail(email)
          
           if(isAccountAlreadyExist)          {
             return res.status(400).json({message:"account already exist "})
@@ -187,8 +192,10 @@ const normalizeEmail = (email) => email?.trim().toLowerCase();
       if (!email || !password) {
         return res.status(400).json({message:"email and password are required"})
       }
+  
 
-      const  foodPartner = await foodPartnerModel.findOne({email:email});
+      
+      const  foodPartner = await findFoodPartnerByEmail(email);
        
        if(!foodPartner)
        {
