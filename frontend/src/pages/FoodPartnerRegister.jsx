@@ -14,11 +14,11 @@ const FoodPartnerRegister = () => {
   const handleSubmit = async (e) => {  
     e.preventDefault();
 
-    const ownerName = e.target.ownerName.value; 
-    const businessName = e.target.businessName.value;
-    const email = e.target.email.value; 
-    const phone = e.target.phone.value;
-    const address  = e.target.address.value;
+    const ownerName = e.target.ownerName.value.trim();
+    const businessName = e.target.businessName.value.trim();
+    const email = e.target.email.value.trim().toLowerCase();
+    const phone = e.target.phone.value.trim();
+    const address  = e.target.address.value.trim();
     const password  = e.target.password.value; 
     const confirmPassword = e.target.confirmPassword.value;
 

@@ -14,10 +14,10 @@ const FoodPartnerLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const email = e.target.email.value;
+    const email = e.target.email.value.trim().toLowerCase();
     const password = e.target.password.value;
 
-    setError("something went wrong");
+    setError("");
     setLoading(true);   
 
     try {
