@@ -6,8 +6,11 @@ const cors = require('cors');
 
 const authRoutes = require('./routes/auth.routes');
 const foodRoutes = require('./routes/food.routes');
-const foodpartnerRoutes = require('./routes/food-partner.routes');
+const foodpartnerRoutes = require('./routes/food-partner.routes');   
 
+ const orderRoutes = require('./routes/order.routes')
+
+ 
 const app = express();
 
 const allowedOrigins = [
@@ -44,6 +47,9 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes); //api/auth  is prefix
 app.use('/api/food', foodRoutes);
-app.use('/api/food-partner', foodpartnerRoutes);
+app.use('/api/food-partner', foodpartnerRoutes); 
+
+app.use('/api/order', orderRoutes)  
+app.use('/api/orders', orderRoutes)
 
 module.exports = app;

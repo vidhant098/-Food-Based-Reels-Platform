@@ -12,6 +12,9 @@ const cookieOptions = {
   secure: process.env.NODE_ENV === 'production',
 };
 
+const USER_TOKEN_COOKIE = 'userToken';
+const FOOD_PARTNER_TOKEN_COOKIE = 'foodPartnerToken';
+
  async function registerUser(req , res )
  {
      const {fullName , email   , password} = req.body ; 
@@ -36,7 +39,9 @@ const cookieOptions = {
         {  id:user._id, },
     process.env.JWT_SECRET )
     
-    res.cookie("token" , token, cookieOptions ) 
+    res.cookie(USER_TOKEN_COOKIE, token, cookieOptions);
+    res.clearCookie(FOOD_PARTNER_TOKEN_COOKIE, cookieOptions);
+    res.clearCookie("token", cookieOptions);
 
     res.status(201).send({message:"user registered successfully" , user:{
         _id:user._id ,
@@ -73,7 +78,9 @@ const cookieOptions = {
         process.env.JWT_SECRET ) 
 
 
-        res.cookie("token" , token, cookieOptions ) 
+        res.cookie(USER_TOKEN_COOKIE, token, cookieOptions);
+        res.clearCookie(FOOD_PARTNER_TOKEN_COOKIE, cookieOptions);
+        res.clearCookie("token", cookieOptions);
 
 
          res.status(200).json({message:' login successfully' , 
@@ -88,6 +95,7 @@ const cookieOptions = {
 
    function logoutUser(req , res )
    {
+     res.clearCookie(USER_TOKEN_COOKIE, cookieOptions)
      res.clearCookie("token", cookieOptions)
      res.status(200).json({message:'logout successfully'})
    } 
@@ -121,7 +129,9 @@ const cookieOptions = {
          } , process.env.JWT_SECRET )       
            
 
-           res.cookie("token" , token, cookieOptions ) ; 
+           res.cookie(FOOD_PARTNER_TOKEN_COOKIE, token, cookieOptions);
+           res.clearCookie(USER_TOKEN_COOKIE, cookieOptions);
+           res.clearCookie("token", cookieOptions);
 
             res.status(200).json({
                 message:"food partnet regitered successfully "  ,  
@@ -159,7 +169,9 @@ const cookieOptions = {
             id:foodPartner._id
              } , process.env.JWT_SECRET )   
              
-             res.cookie("token" , token, cookieOptions ) ; 
+             res.cookie(FOOD_PARTNER_TOKEN_COOKIE, token, cookieOptions);
+             res.clearCookie(USER_TOKEN_COOKIE, cookieOptions);
+             res.clearCookie("token", cookieOptions);
 
              res.status(200).json({
                 message:"food partner login successfully"  ,  
@@ -175,6 +187,7 @@ const cookieOptions = {
     //  food partner logout
      async function logoutFoodPartner(req , res )
      {
+      res.clearCookie(FOOD_PARTNER_TOKEN_COOKIE, cookieOptions)
       res.clearCookie("token", cookieOptions)
       res.status(200).json({message:"food partner logout successfully "}) 
      }

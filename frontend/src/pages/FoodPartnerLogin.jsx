@@ -17,7 +17,7 @@ const FoodPartnerLogin = () => {
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    setError("");
+    setError("something went wrong");
     setLoading(true);   
 
     try {
@@ -35,6 +35,7 @@ const FoodPartnerLogin = () => {
       const message = err.response?.data?.message || "Login failed";
       console.log(err);
       setError(message);
+      
     } finally {
       setLoading(false);
     }
@@ -67,7 +68,7 @@ const FoodPartnerLogin = () => {
               <input 
                 name="password"
                 type="password" 
-                placeholder="Enter your password"
+                placeholder="Enter your password 6 characters or more"
                 required 
               />
             </div>

@@ -1,0 +1,104 @@
+/* ===========================================
+   ACTION BUTTONS — Reusable Component
+   Mobile-first: overlaid on reel, right side
+   Desktop: positioned outside the video to the right
+=========================================== */
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: auto;
+  z-index: 60;
+}
+
+/* ── Column layout (default for reels) ── */
+.action-buttons--column {
+  flex-direction: column;
+}
+
+/* ── Row layout (for grid / horizontal layouts) ── */
+.action-buttons--row {
+  flex-direction: row;
+}
+
+/* ── Individual action button ── */
+.action-buttons .action-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  font-size: 0.68rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  transition: transform 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
+  padding: 4px;
+}
+
+.action-buttons .action-btn:active {
+  transform: scale(0.95);
+}
+
+.action-buttons .action-btn svg {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+}
+
+.action-buttons .action-btn span {
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* ── Row layout button tweaks ── */
+.action-buttons--row .action-btn {
+  flex-direction: row;
+  gap: 6px;
+  font-size: 0.78rem;
+}
+
+.action-buttons--row .action-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* ===========================================
+   MOBILE-FIRST: Overlaid on reel (right side)
+=========================================== */
+@media (max-width: 767px) {
+  .action-buttons--column {
+    gap: 8px;
+  }
+
+  .action-buttons .action-btn {
+    font-size: 0.6rem;
+  }
+
+  .action-buttons .action-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+
+}
+
+/* ===========================================
+   DESKTOP: Positioned outside the video to the right
+=========================================== */
+@media (min-width: 768px) {
+  .action-buttons--column {
+    gap: 12px;
+  }
+
+  .action-buttons .action-btn {
+    font-size: 0.72rem;
+  }
+
+  .action-buttons .action-btn svg {
+    width: 30px;
+    height: 30px;
+  }
+
+}
+

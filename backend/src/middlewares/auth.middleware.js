@@ -20,8 +20,8 @@ async function authFoodPartnerMiddleware(req, res, next) {
         }
 
     
-        else if (req.cookies && req.cookies.token) {
-            token = req.cookies.token;
+        else if (req.cookies?.foodPartnerToken || req.cookies?.token) {
+            token = req.cookies.foodPartnerToken || req.cookies.token;
         }
 
         
@@ -57,7 +57,7 @@ async function authFoodPartnerMiddleware(req, res, next) {
 const authUserMiddleware = async (req, res, next) => {
   try {
     // Accept token from cookie OR Authorization header
-    const tokenFromCookie = req.cookies?.token;
+    const tokenFromCookie = req.cookies?.userToken || req.cookies?.token;
     const authHeader = req.headers?.authorization;
 
     let token = tokenFromCookie;

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom'; 
 import { API_BASE_URL } from '../config/api';
 
+ import { toast } from 'react-hot-toast';
  import { useState } from 'react';
 
 const UserLogin = () => {
@@ -24,7 +25,11 @@ const UserLogin = () => {
       return; 
 
      }
-setLoading(true) ; 
+      if(password.length < 6 ){
+        toast.error("Password must be at least 6 characters long");
+        return; 
+      }
+    setLoading(true) ; 
 
     try {
       const response = await axios.post(
@@ -97,8 +102,8 @@ setLoading(true) ;
             </p>
 
             <p>
-              Restaurant owner?{" "}
-              <Link to="/food-partner/login">Partner Login</Link>
+              Restaurant owner?{" my loard "}
+              <Link to="/food-partner/login">  Login as Partner</Link>
             </p>
           </div>
 

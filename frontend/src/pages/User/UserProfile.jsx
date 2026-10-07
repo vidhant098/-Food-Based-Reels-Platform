@@ -4,7 +4,7 @@ import axios from 'axios';
 import BottomNav from '../../components/BottomNav';
 import './UserProfile.css';
 import { API_BASE_URL } from '../../config/api';
-
+import toast from 'react-hot-toast';
 const UserProfile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -54,15 +54,23 @@ const UserProfile = () => {
             (savedRes.data.savedFoods || [])
               .map((item) => item.food)
               .filter(Boolean)
-          );
-        } catch (videoErr) {
+          ); 
+
+        } 
+         catch (videoErr) {
           console.log('Error fetching liked/saved videos:', videoErr);
         }
       } catch (err) {
         if (err.response?.status === 401) {
-          alert('You are not logged in yet');
+           
+
+    //         setTimeout(() => {
+    //   navigate("/user/login");
+    // }, 2000);
        
-          navigate('/user/login');
+
+
+          
         } else {
           console.log('Error fetching user:', err);
         }
@@ -72,7 +80,7 @@ const UserProfile = () => {
     };
 
     fetchUserData();
-  }, [navigate]);
+  }, []);
 
   const handleLogout = async () => {
     setLoggingOut(true);
@@ -84,6 +92,7 @@ const UserProfile = () => {
       localStorage.removeItem('userToken');
       localStorage.removeItem('theme');
       setUser(null);
+      toast.success('Logged out successfully');
       navigate('/user/login', { replace: true });
     }
      catch (err) {
